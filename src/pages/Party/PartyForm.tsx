@@ -12,44 +12,51 @@ import {
     FormControl,
 } from "@mui/material";
 import { useState, useEffect } from "react";
+import { defaultBgColorMap, defaultTextColorMap } from "./PartyTable";
+import { DatePicker, } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 export default function PartyForm({
     open,
     onClose,
     onSubmit,
     initialData,
+    readOnly,
 }: {
     open: boolean;
     onClose: () => void;
     onSubmit: (data: any) => void;
     initialData?: any;
+    readOnly: boolean
 }) {
     const [form, setForm] = useState({
         id: 0,
-        date: "",
-        shift: "",
-        hall: "",
         groom: "",
         bride: "",
         phone: "",
+        date: "",
+        shift: "",
+        hall: "",
+        deposit: 0,
         tables: 0,
         reserveTables: 0,
-        deposit: 0,
     });
 
     useEffect(() => {
         if (initialData) setForm(initialData);
         else setForm({
             id: 0,
-            date: "",
-            shift: "",
-            hall: "",
             groom: "",
             bride: "",
             phone: "",
+            date: "",
+            shift: "",
+            hall: "",
+            deposit: 0,
             tables: 0,
             reserveTables: 0,
-            deposit: 0,
         });
     }, [initialData]);
 
@@ -57,8 +64,9 @@ export default function PartyForm({
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
             sx={{
                 '& .MuiPaper-root': {
-                    padding: '10px 4px',
-                    borderRadius: '15px'
+                    padding: '26px 4px',
+                    borderRadius: '15px',
+                    maxWidth: '700px',
                 },
                 '& .MuiDialogContent-root': {
                     padding: 0,
@@ -78,13 +86,15 @@ export default function PartyForm({
         >
             <DialogTitle sx={{
                 padding: '8px 24px',
-                paddingTop: '16px',
+                paddingTop: '0px',
                 fontWeight: 'bold',
                 textAlign: 'center',
             }}>
-                {initialData ?
-                    "Đặt tiệc"
-                    : "Cập nhật thông tin tiệc"
+                {readOnly ?
+                    "Thông tin tiệc"
+                    : initialData ?
+                        "Cập nhật thông tin tiệc"
+                        : "Đặt tiệc"
                 }
             </DialogTitle>
 
@@ -100,7 +110,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tên chú rể
                         </Typography>
                         <TextField fullWidth value={form.groom}
@@ -112,7 +122,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tên cô dâu
                         </Typography>
                         <TextField fullWidth value={form.bride}
@@ -124,7 +134,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số điện thoại
                         </Typography>
                         <TextField fullWidth value={form.phone}
@@ -134,13 +144,107 @@ export default function PartyForm({
 
                     <Box sx={{
                         display: 'flex',
+                        flexDirection: ({ xs: 'column', sm: 'row', }),
                         gap: '18px',
                     }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <FormControl fullWidth sx={{
+                                flexDirection: 'column',
+                            }}>
+                                <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                    Ngày tổ chức
+                                </Typography>
+                                <DatePicker
+                                    value={dayjs(form.date)}
+                                    format="DD/MM/YYYY"
+                                    onChange={(value) => setForm({
+                                        ...form,
+                                        date: (value?.toDate() || new Date()).toString()
+                                    })}
+                                    sx={{
+                                        "& .MuiPickersInputBase-root": {
+                                            backgroundColor: '#fff',
+                                            borderRadius: "10px",
+                                            gap: '5px',
+                                            '& .MuiPickersOutlinedInput-root.Mui-error .MuiPickersOutlinedInput-notchedOutline': {
+                                                borderColor: 'rgba(0, 0, 0, 0.23)'
+                                            }
+                                        },
+                                        "& .MuiPickersSectionList-root": {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            height: '61px',
+                                            paddingY: '0px',
+                                        },
+                                    }}
+                                    slotProps={{
+                                        popper: {
+                                            sx: {
+                                                '& .MuiPaper-root': {
+                                                    borderRadius: '20px',
+                                                },
+                                                '& .MuiDateCalendar-root': {
+                                                    padding: '18px 20px',
+                                                    gap: '10px',
+                                                    maxHeight: '360px',
+                                                    height: 'auto',
+                                                    width: '310px'
+                                                },
+                                                '& .MuiPickersCalendarHeader-root': {
+                                                    padding: '0 8px',
+                                                    margin: 0,
+                                                    justifyContent: 'space-between',
+                                                },
+                                                '& .MuiPickersCalendarHeader-labelContainer': {
+                                                    color: '#202224',
+                                                    fontWeight: 600,
+                                                    fontSize: '15px',
+                                                    margin: 0,
+                                                },
+                                                '& .MuiPickersArrowSwitcher-root': {
+                                                    gap: '5px'
+                                                },
+                                                '& .MuiPickersArrowSwitcher-button': {
+                                                    padding: 0,
+                                                    backgroundColor: '#e7e9ee',
+                                                    borderRadius: '5px'
+                                                },
+                                                '& .MuiTypography-root': {
+                                                    color: '#454545',
+                                                },
+                                                '& .MuiDayCalendar-slideTransition': {
+                                                    minHeight: 0,
+                                                    marginBottom: '4px'
+                                                },
+                                            },
+
+                                        },
+                                        day: {
+                                            sx: {
+                                                color: "#8f9091",
+                                                borderRadius: '10px',
+                                                '&:hover': {
+                                                    backgroundColor: '#e3f2fd',
+                                                },
+                                                '&.MuiPickersDay-root.Mui-selected': {
+                                                    backgroundColor: '#4880FF',
+                                                    color: '#fff',
+                                                    '&:hover': {
+                                                        backgroundColor: '#4880FF'
+                                                    }
+                                                },
+                                            },
+                                        },
+                                    }}
+                                />
+                            </FormControl>
+                        </LocalizationProvider>
+
                         <FormControl fullWidth sx={{
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                            <Typography>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                                 Ca
                             </Typography>
                             <Select
@@ -175,11 +279,25 @@ export default function PartyForm({
                                 <MenuItem value="" disabled>
                                     Chọn ca     {/* placeholder */}
                                 </MenuItem>
-                                {["Trưa", "Tối"].map((item) => (
-                                    <MenuItem value={item}>
-                                        {item}
+                                {["Trưa", "Tối"].map((item) =>
+                                    <MenuItem value={item}
+                                        sx={{
+                                        }}
+                                    >
+                                        <Box sx={{
+                                            display: 'inline-flex',
+                                            paddingX: 1.5,
+                                            paddingY: 0.5,
+                                            borderRadius: 2,
+                                            backgroundColor: defaultBgColorMap[item],
+                                            color: defaultTextColorMap[item],
+                                            fontWeight: 'bold',
+                                            zIndex: 100
+                                        }}>
+                                            {item}
+                                        </Box>
                                     </MenuItem>
-                                ))}
+                                )}
                             </Select>
                         </FormControl>
 
@@ -187,7 +305,7 @@ export default function PartyForm({
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                            <Typography>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                                 Sảnh
                             </Typography>
                             <Select
@@ -232,6 +350,8 @@ export default function PartyForm({
                                             paddingX: 1.5,
                                             paddingY: 0.5,
                                             borderRadius: 2,
+                                            backgroundColor: defaultBgColorMap[item],
+                                            color: defaultTextColorMap[item],
                                             fontWeight: 'bold',
                                         }}>
                                             {item}
@@ -246,7 +366,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tiền cọc
                         </Typography>
                         <TextField fullWidth value={form.deposit}
@@ -258,7 +378,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số lượng bàn
                         </Typography>
                         <TextField fullWidth value={form.tables}
@@ -270,7 +390,7 @@ export default function PartyForm({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Typography>
+                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số bàn dự trữ
                         </Typography>
                         <TextField fullWidth value={form.reserveTables}
@@ -280,33 +400,36 @@ export default function PartyForm({
                 </Box>
             </DialogContent>
 
-            <DialogActions sx={{
-                alignSelf: 'center',
-                padding: '16px',
-                gap: '10px',
-            }}>
-                <Button onClick={onClose}
-                    sx={{
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        color: 'var(--text-color)',
-                        textTransform: "none",
-                    }}
-                >
-                    Huỷ
-                </Button>
-                <Button onClick={() => onSubmit(form)} variant="contained"
-                    sx={{
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        borderRadius: '8px',
-                        backgroundColor: "#4880FF",
-                        textTransform: "none",
-                    }}
-                >
-                    Lưu
-                </Button>
-            </DialogActions>
+            {!readOnly &&
+                <DialogActions sx={{
+                    alignSelf: 'center',
+                    paddingTop: '16px',
+                    paddingBottom: '0px',
+                    gap: '10px',
+                }}>
+                    <Button onClick={onClose}
+                        sx={{
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            color: 'var(--text-color)',
+                            textTransform: "none",
+                        }}
+                    >
+                        Huỷ
+                    </Button>
+                    <Button onClick={() => onSubmit(form)} variant="contained"
+                        sx={{
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            borderRadius: '8px',
+                            backgroundColor: "#4880FF",
+                            textTransform: "none",
+                        }}
+                    >
+                        Lưu
+                    </Button>
+                </DialogActions>
+            }
         </Dialog>
     );
 }

@@ -12,7 +12,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/sanh-tiec" element={<Hall />} />
       <Route path="/tiec-cuoi" element={<Party />} />
-      <Route path="/lich-su-kien" element={<Schedule />} />
+      <Route path="/lich-su-kien/:view" element={<Schedule />} />
       <Route path="/mon-an" element={<Food />} />
       <Route path="/dich-vu" element={<Service />} />
       <Route path="/bao-cao" element={<Report />} />

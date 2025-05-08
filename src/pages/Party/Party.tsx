@@ -2,34 +2,25 @@ import { useState } from "react";
 import {
     Box,
     Button,
-    TextField,
     Typography,
-    InputAdornment,
     FormControl,
     Select,
     MenuItem,
 } from "@mui/material";
-import { SearchIcon, PlusCircle, } from "lucide-react";
+import { PlusCircle, } from "lucide-react";
 import PartyTable from "./PartyTable";
 import { IParty } from "../../interfaces/party.interface";
 import ConfirmDelete from "../../components/Alert/ConfirmDelete/ConfirmDelete";
 import PartyForm from "./PartyForm";
+import PartyFilter from "../../components/Filter/PartyFilter";
+import SearchBar from "../../components/SearchBar"
+import { DatePicker, } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 type PartyKey = keyof IParty;
 
-const NullParty: IParty = {
-    id: 0,
-    date: "",
-    shift: "",
-    hall: "",
-    groom: "",
-    bride: "",
-    phone: "",
-    tables: 0,
-    reserveTables: 0,
-    deposit: 0,
-    status: ""
-}
 const initialData: IParty[] = [
     {
         id: 1,
@@ -42,20 +33,20 @@ const initialData: IParty[] = [
         deposit: 10000000,
         tables: 1000000,
         reserveTables: 5,
-        status: "Chưa thanh toán",
+        status: "Đã đặt cọc",
     },
     {
         id: 2,
         groom: "Lê Minh Quân",
         bride: "Phạm Thị Hạnh",
         phone: "0934567890",
-        date: "2025-06-20",
+        date: "2025-04-20",
         shift: "Tối",
         hall: "B",
         deposit: 15000000,
         tables: 50,
         reserveTables: 3,
-        status: "Chưa thanh toán",
+        status: "Đã tổ chức",
     },
     {
         id: 3,
@@ -68,7 +59,7 @@ const initialData: IParty[] = [
         deposit: 12000000,
         tables: 40,
         reserveTables: 2,
-        status: "Đã đặt cọc",
+        status: "Đã huỷ",
     },
     {
         id: 4,
@@ -94,7 +85,7 @@ const initialData: IParty[] = [
         deposit: 11000000,
         tables: 35,
         reserveTables: 2,
-        status: "Chưa thanh toán",
+        status: "Đã đặt cọc",
     },
     {
         id: 6,
@@ -114,26 +105,26 @@ const initialData: IParty[] = [
         groom: "Hoàng Văn Khánh",
         bride: "Đặng Thị Hương",
         phone: "0944556677",
-        date: "2025-07-15",
+        date: "2025-03-15",
         shift: "Trưa",
         hall: "B",
         deposit: 13000000,
         tables: 45,
         reserveTables: 3,
-        status: "Chưa thanh toán",
+        status: "Đã tổ chức",
     },
     {
         id: 8,
         groom: "Vũ Thành Long",
         bride: "Nguyễn Thị Hồng",
         phone: "0955667788",
-        date: "2025-07-20",
+        date: "2025-03-20",
         shift: "Tối",
         hall: "C",
         deposit: 17000000,
         tables: 60,
         reserveTables: 4,
-        status: "Chưa thanh toán",
+        status: "Đã tổ chức",
     },
     {
         id: 9,
@@ -172,20 +163,20 @@ const initialData: IParty[] = [
         deposit: 15500000,
         tables: 42,
         reserveTables: 2,
-        status: "Chưa thanh toán",
+        status: "Đã thanh toán",
     },
     {
         id: 12,
         groom: "Tống Văn Sơn",
         bride: "Đinh Thị Lệ",
         phone: "0999001122",
-        date: "2025-08-09",
+        date: "2025-04-09",
         shift: "Tối",
         hall: "B",
         deposit: 19000000,
         tables: 70,
         reserveTables: 5,
-        status: "Đã thanh toán",
+        status: "Đã tổ chức",
     },
 ];
 
@@ -196,25 +187,34 @@ export default function PartyPage() {
     const [searchBy, setSearchBy] = useState<PartyKey>("groom");
     const [filterShift, setFilterShift] = useState("");
     const [filterHall, setFilterHall] = useState("");
+    const [fromDate, setFromDate] = useState((dayjs().startOf("year")).toString());
+    const [toDate, setToDate] = useState((dayjs().endOf("year")).toString());
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editData, setEditData] = useState<IParty>(NullParty);
+    const [editData, setEditData] = useState<IParty | null>(null);
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
     const filteredParties = parties.filter((party) => {
-        const value = party[searchBy];
+        if (searchBy == 'date') return true;
+
+        const partyDate = new Date(party.date);
+
+        const matchesDate = (new Date(fromDate) <= partyDate && partyDate <= new Date(toDate));
         const matchesShift = filterShift ? party.shift === filterShift : true;
         const matchesHall = filterHall ? party.hall === filterHall : true;
+
+        if (searchKey == "") return matchesDate && matchesShift && matchesHall;
+
+        const value = party[searchBy];
         if (typeof value === 'number') {
             // Nếu tìm theo số, so sánh chính xác
-            if (searchKey == "") return true;
-            return value === Number(searchKey) && matchesShift && matchesHall;
+            return value === Number(searchKey) && matchesDate && matchesShift && matchesHall;
         }
-        return value.toLowerCase().includes(searchKey.toLowerCase()) && matchesShift && matchesHall;
+        return value.toLowerCase().includes(searchKey.toLowerCase()) && matchesDate && matchesShift && matchesHall;
     })
 
     const handleAdd = () => {
-        setEditData(NullParty);
+        setEditData(null);
         setIsFormOpen(true);
     };
 
@@ -235,16 +235,17 @@ export default function PartyPage() {
             flexDirection: 'column',
             height: "100%",
             overflow: 'hidden',
-            boxSizing: 'border-box'
+            backgroundColor: '#fff',
+            borderRadius: '15px',
+            paddingTop: '15px',
         }}>
             <Typography
                 sx={{
                     userSelect: "none",
                     color: "var(--text-color)",
                     fontWeight: "bold",
-                    fontSize: "28px",
-                    marginBottom: "10px",
-                    marginX: "10px",
+                    fontSize: "32px",
+                    marginX: "20px",
                 }}
             >
                 Danh sách tiệc cưới
@@ -255,8 +256,8 @@ export default function PartyPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    marginBottom: "30px",
-                    marginX: "10px",
+                    marginBottom: "20px",
+                    marginX: "20px",
                 }}
             >
                 <Box sx={{
@@ -265,51 +266,9 @@ export default function PartyPage() {
                     width: "80%",
                     alignItems: 'flex-end',
                 }}>
-                    <TextField
-                        id="location-search"
-                        type="search"
-                        placeholder={"Tìm kiếm"}
-                        variant="outlined"
-                        required
+                    <SearchBar
                         value={searchKey}
                         onChange={(e) => setSearchKey(e.target.value)}
-                        sx={{
-                            flex: 2,
-                            "& fieldset": {
-                                borderRadius: "10px",
-                            },
-                            "& .MuiInputBase-root": {
-                                paddingLeft: "0px",
-                                paddingRight: "12px",
-                            },
-                            "& .MuiInputBase-input": {
-                                padding: "10px 0px",
-                                fontSize: "16px",
-                                "&::placeholder": {
-                                    color: "#a5bed4",
-                                    opacity: 1,
-                                },
-                            },
-                        }}
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start" >
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                color: "#a5bed4",
-                                                padding: "12px",
-                                                zIndex: 100,
-                                            }}
-                                        >
-                                            <SearchIcon />
-                                        </Box>
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
                     />
 
                     <FormControl
@@ -321,6 +280,7 @@ export default function PartyPage() {
                             "& .MuiInputBase-input": {
                                 paddingY: "10px",
                                 paddingLeft: "14px",
+                                backgroundColor: '#fff',
                             },
                         }}
                     >
@@ -368,124 +328,195 @@ export default function PartyPage() {
                         </Select>
                     </FormControl>
 
-                    <Box sx={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                            Chọn ca
-                        </Typography>
-                        <FormControl
-                            sx={{
-                                "& fieldset": {
-                                    borderRadius: "10px",
-                                },
-                                "& .MuiInputBase-input": {
-                                    paddingY: "10px",
-                                    paddingLeft: "14px",
-                                },
-                            }}
-                        >
-                            <Select
-                                value={filterShift}
-                                onChange={(e) => setFilterShift(e.target.value)}
-                                displayEmpty
-                                MenuProps={{
-                                    PaperProps: {
+                    <PartyFilter
+                        label="Chọn ca"
+                        value={filterShift}
+                        onChange={(e) => setFilterShift(e.target.value)}
+                        children={["Trưa", "Tối"]}
+                    />
+
+                    <PartyFilter
+                        label="Chọn sảnh"
+                        value={filterHall}
+                        onChange={(e) => setFilterHall(e.target.value)}
+                        children={["A", "B", "C", "D", "E"]}
+                    />
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Box sx={{
+                            flexDirection: 'column',
+                        }}>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                Từ ngày
+                            </Typography>
+                            <DatePicker
+                                value={dayjs(fromDate)}
+                                format="DD/MM/YYYY"
+                                onChange={(value) => setFromDate((
+                                    value?.toDate() || new Date()).toString()
+                                )}
+                                sx={{
+                                    "& .MuiPickersInputBase-root": {
+                                        backgroundColor: '#fff',
+                                        borderRadius: "10px",
+                                        gap: '5px',
+                                    },
+                                    "& .MuiPickersSectionList-root": {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        height: '43px',
+                                        width: 'fit-content',
+                                        paddingY: '0px',
+                                    },
+                                }}
+                                slotProps={{
+                                    popper: {
                                         sx: {
-                                            boxSizing: 'border-box',
-                                            padding: "0 8px",
-                                            border: "1px solid #e4e4e7",
-                                            "& .MuiMenuItem-root": {
-                                                borderRadius: "6px",
-                                                "&:hover": {
-                                                    backgroundColor: "rgba(117, 126, 136, 0.08)",
-                                                },
-                                                "&.Mui-selected": {
-                                                    backgroundColor: "#bcd7ff",
-                                                },
+                                            '& .MuiPaper-root': {
+                                                borderRadius: '20px',
+                                            },
+                                            '& .MuiDateCalendar-root': {
+                                                padding: '18px 20px',
+                                                gap: '10px',
+                                                maxHeight: '360px',
+                                                height: 'auto',
+                                                width: '310px'
+                                            },
+                                            '& .MuiPickersCalendarHeader-root': {
+                                                padding: '0 8px',
+                                                margin: 0,
+                                                justifyContent: 'space-between',
+                                            },
+                                            '& .MuiPickersCalendarHeader-labelContainer': {
+                                                color: '#202224',
+                                                fontWeight: 600,
+                                                fontSize: '15px',
+                                                margin: 0,
+                                            },
+                                            '& .MuiPickersArrowSwitcher-root': {
+                                                gap: '5px'
+                                            },
+                                            '& .MuiPickersArrowSwitcher-button': {
+                                                padding: 0,
+                                                backgroundColor: '#e7e9ee',
+                                                borderRadius: '5px'
+                                            },
+                                            '& .MuiTypography-root': {
+                                                color: '#454545',
+                                            },
+                                            '& .MuiDayCalendar-slideTransition': {
+                                                minHeight: 0,
+                                                marginBottom: '4px'
+                                            },
+                                        },
+                                    },
+                                    day: {
+                                        sx: {
+                                            color: "#8f9091",
+                                            borderRadius: '10px',
+                                            '&:hover': {
+                                                backgroundColor: '#e3f2fd',
+                                            },
+                                            '&.MuiPickersDay-root.Mui-selected': {
+                                                backgroundColor: '#4880FF',
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    backgroundColor: '#4880FF'
+                                                }
                                             },
                                         },
                                     },
                                 }}
-                            >
-                                <MenuItem value="">
-                                    Tất cả
-                                </MenuItem>
-                                <MenuItem value="Trưa">
-                                    Trưa
-                                </MenuItem>
-                                <MenuItem value="Tối">
-                                    Tối
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    
-                    <Box sx={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                            Chọn sảnh
-                        </Typography>
-                        <FormControl
-                            sx={{
-                                "& fieldset": {
-                                    borderRadius: "10px",
-                                },
-                                "& .MuiInputBase-input": {
-                                    paddingY: "10px",
-                                    paddingLeft: "14px",
-                                },
-                            }}
-                        >
-                            <Select
-                                value={filterHall}
-                                onChange={(e) => setFilterHall(e.target.value)}
-                                displayEmpty
-                                MenuProps={{
-                                    PaperProps: {
+                            />
+                        </Box>
+
+                        <Box sx={{
+                            flexDirection: 'column',
+                        }}>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
+                                Đến ngày
+                            </Typography>
+                            <DatePicker
+                                value={dayjs(toDate)}
+                                format="DD/MM/YYYY"
+                                onChange={(value) => setToDate((
+                                    value?.toDate() || new Date()).toString()
+                                )}
+                                sx={{
+                                    "& .MuiPickersInputBase-root": {
+                                        backgroundColor: '#fff',
+                                        borderRadius: "10px",
+                                        gap: '5px'
+                                    },
+                                    "& .MuiPickersSectionList-root": {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        height: '43px',
+                                        width: 'fit-content',
+                                        paddingY: '0px',
+                                    },
+                                }}
+                                slotProps={{
+                                    popper: {
                                         sx: {
-                                            boxSizing: 'border-box',
-                                            padding: "0 8px",
-                                            border: "1px solid #e4e4e7",
-                                            "& .MuiMenuItem-root": {
-                                                borderRadius: "6px",
-                                                "&:hover": {
-                                                    backgroundColor: "rgba(117, 126, 136, 0.08)",
-                                                },
-                                                "&.Mui-selected": {
-                                                    backgroundColor: "#bcd7ff",
-                                                },
+                                            '& .MuiPaper-root': {
+                                                borderRadius: '20px',
+                                            },
+                                            '& .MuiDateCalendar-root': {
+                                                padding: '18px 20px',
+                                                gap: '10px',
+                                                maxHeight: '360px',
+                                                height: 'auto',
+                                                width: '310px'
+                                            },
+                                            '& .MuiPickersCalendarHeader-root': {
+                                                padding: '0 8px',
+                                                margin: 0,
+                                                justifyContent: 'space-between',
+                                            },
+                                            '& .MuiPickersCalendarHeader-labelContainer': {
+                                                color: '#202224',
+                                                fontWeight: 600,
+                                                fontSize: '15px',
+                                                margin: 0,
+                                            },
+                                            '& .MuiPickersArrowSwitcher-root': {
+                                                gap: '5px'
+                                            },
+                                            '& .MuiPickersArrowSwitcher-button': {
+                                                padding: 0,
+                                                backgroundColor: '#e7e9ee',
+                                                borderRadius: '5px'
+                                            },
+                                            '& .MuiTypography-root': {
+                                                color: '#454545',
+                                            },
+                                            '& .MuiDayCalendar-slideTransition': {
+                                                minHeight: 0,
+                                                marginBottom: '4px'
+                                            },
+                                        },
+                                    },
+                                    day: {
+                                        sx: {
+                                            color: "#8f9091",
+                                            borderRadius: '10px',
+                                            '&:hover': {
+                                                backgroundColor: '#e3f2fd',
+                                            },
+                                            '&.MuiPickersDay-root.Mui-selected': {
+                                                backgroundColor: '#4880FF',
+                                                color: '#fff',
+                                                '&:hover': {
+                                                    backgroundColor: '#4880FF'
+                                                }
                                             },
                                         },
                                     },
                                 }}
-                            >
-                                <MenuItem value="">
-                                    Tất cả
-                                </MenuItem>
-                                <MenuItem value="A">
-                                    A
-                                </MenuItem>
-                                <MenuItem value="B">
-                                    B
-                                </MenuItem>
-                                <MenuItem value="C">
-                                    C
-                                </MenuItem>
-                                <MenuItem value="C">
-                                    D
-                                </MenuItem>
-                                <MenuItem value="E">
-                                    E
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
+                            />
+                        </Box>
+                    </LocalizationProvider>
                 </Box>
 
                 <Button
@@ -500,7 +531,7 @@ export default function PartyPage() {
                         borderRadius: '8px',
                         backgroundColor: "#4880FF",
                         "&:hover": {
-                            backgroundColor: "#5889fd",
+                            backgroundColor: "#3578f0",
                         },
                         textTransform: "none",
                     }}
@@ -521,7 +552,7 @@ export default function PartyPage() {
             <PartyForm
                 open={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
-                onSubmit={(data) => {
+                onSubmit={(_data) => {
                     if (editData) {
                         // update logic
                     } else {
@@ -530,6 +561,7 @@ export default function PartyPage() {
                     setIsFormOpen(false);
                 }}
                 initialData={editData}
+                readOnly={false}
             />
 
             <ConfirmDelete

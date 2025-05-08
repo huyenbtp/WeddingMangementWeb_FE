@@ -21,7 +21,7 @@ export default function Sidebar() {
   const menuItems = [
     { path: 'sanh-tiec', icon: <Landmark size={26} />, label: 'Sảnh tiệc' },
     { path: 'tiec-cuoi', icon: <Wine size={26} />, label: 'Tiệc cưới' },
-    { path: 'lich-su-kien', icon: <Calendar size={26} />, label: 'Lịch sự kiện' },
+    { path: 'lich-su-kien/tuan', icon: <Calendar size={26} />, label: 'Lịch sự kiện' },
     { path: 'mon-an', icon: <Utensils size={26} />, label: 'Món ăn' },
     { path: 'dich-vu', icon: <Gift size={26} />, label: 'Dịch vụ' },
     { path: 'bao-cao', icon: <ChartArea size={26} />, label: 'Báo cáo' },
