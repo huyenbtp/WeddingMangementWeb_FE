@@ -5,17 +5,12 @@ import { IParty } from "../../interfaces/party.interface";
 import PartyForm from "../Party/PartyForm";
 import WeeklySchedule from "./WeeklySchedule";
 import dayjs from "dayjs";
-import weekday from "dayjs/plugin/weekday";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useParams, useNavigate } from 'react-router-dom';
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import MonthlySchedule from "./MonthlySchedule";
 
-// Extend dayjs with necessary plugins
-dayjs.extend(weekday);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
+// Extend dayjs with necessary plugins\
 
 const initialData: IParty[] = [
   {
@@ -180,8 +175,8 @@ export default function Schedule() {
   const { view } = useParams<{ view: 'tuan' | 'thang' }>();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'tuan' | 'thang'>(view || 'tuan');
-  const [currentWeekStart, setCurrentWeekStart] = useState(dayjs().startOf("week").add(1, "day"));
-  const [tempDate, setTempDate] = useState(currentWeekStart);
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [tempDate, setTempDate] = useState(currentDate);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [detailData, setDetailData] = useState<IParty | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -192,6 +187,10 @@ export default function Schedule() {
     }
   }, [view]);
 
+  useEffect(() => {
+    setTempDate(currentDate);
+  }, [currentDate]);
+  
   const handleChangeViewMode = (
     event: React.MouseEvent<HTMLElement>,
     newView: 'tuan' | 'thang' | null
@@ -201,29 +200,27 @@ export default function Schedule() {
     }
   };
 
-  const goToPreviousWeek = () => {
-    setCurrentWeekStart(currentWeekStart.subtract(1, "week"));
+  const goToPrevious = () => {
+    setCurrentDate(
+      viewMode === 'tuan'
+        ? currentDate.subtract(1, "week")
+        : currentDate.subtract(1, 'month'));
   };
 
-  const goToNextWeek = () => {
-    setCurrentWeekStart(currentWeekStart.add(1, "week"));
+  const goToNext = () => {
+    setCurrentDate(
+      viewMode === 'tuan'
+        ? currentDate.add(1, "week")
+        : currentDate.add(1, 'month'));
   };
-
-  const getWeekDates = () => {
-    return Array.from({ length: 7 }).map((_, index) =>
-      currentWeekStart.add(index, "day")
-    );
-  };
-
-  const weekDates = getWeekDates();
 
   const handleOpenCalendar = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleCloseCalendar = (save: boolean) => {
-    if (save) setCurrentWeekStart(tempDate.startOf("week").add(1, "day"));
-    else setTempDate(currentWeekStart);
+    if (save) setCurrentDate(tempDate);
+    else setTempDate(currentDate);
     setAnchorEl(null)
   };
 
@@ -234,6 +231,9 @@ export default function Schedule() {
 
   return (
     <Box sx={{
+      display: "flex",
+      flexDirection: 'column',
+      justifyContent: 'space-between',
       height: "100%",
       overflow: 'hidden',
       backgroundColor: '#fff',
@@ -245,19 +245,18 @@ export default function Schedule() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: '50px',
         position: 'relative',
       }}>
-        <IconButton onClick={goToPreviousWeek}><ChevronLeft /></IconButton>
+        <IconButton onClick={goToPrevious}><ChevronLeft /></IconButton>
         <Typography onClick={handleOpenCalendar}
           sx={{
             fontSize: '24px',
             fontWeight: 'bold',
             cursor: 'pointer'
           }}>
-          {`${weekDates[6].format("MMMM")} ${weekDates[0].format("YYYY")}`}
+          {`${currentDate.endOf('week').format("MMMM")} ${currentDate.add(6, 'day').format("YYYY")}`}
         </Typography>
-        <IconButton onClick={goToNextWeek}><ChevronRight /></IconButton>
+        <IconButton onClick={goToNext}><ChevronRight /></IconButton>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Popover
@@ -392,16 +391,20 @@ export default function Schedule() {
       </Box>
 
       <Box sx={{
-        height: "85%",
+        height: "90%",
       }}>
         {viewMode === 'tuan' ? (
           <WeeklySchedule
-            weekDates={weekDates}
+            currentWeek={currentDate}
             partyData={initialData}
             onViewPartyDetail={handleViewDetail}
           />
         ) : (
-          null
+          <MonthlySchedule
+            currentMonth={currentDate}
+            partyData={initialData}
+            onViewPartyDetail={handleViewDetail}
+          />
         )}
 
       </Box>

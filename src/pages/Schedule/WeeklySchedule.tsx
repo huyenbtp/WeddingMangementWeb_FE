@@ -4,35 +4,52 @@ import { defaultBgColorMap, } from "../Party/PartyTable";
 import dayjs from "dayjs";
 
 export default function WeeklySchedule({
-    weekDates,
+    currentWeek,
     partyData,
     onViewPartyDetail
 }: {
-    weekDates: dayjs.Dayjs[],
+    currentWeek: dayjs.Dayjs,
     partyData: IParty[],
     onViewPartyDetail: (party: any) => void,
 }) {
+    const weekStart = currentWeek.startOf('week');
+
+    const getWeekDates = () => {
+        return Array.from({ length: 7 }).map((_, index) =>
+            weekStart.add(index, "day")
+        );
+    };
+
+    const weekDates = getWeekDates();
+
     return (
         <Box sx={{
             height: "100%",
             display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
+            gridTemplateColumns: { xs: 'none', md: 'repeat(7, 1fr)' },
+            gridTemplateRows: { xs: 'repeat(7, 1fr)', md: 'none' },
         }}>
             {weekDates.map((date, index) => (
                 <Box
                     key={date.toString()}
                     sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'row', md: 'column' },
                         overflow: 'hidden',
-                        borderRight: index < 6 ? '1px solid black' : 'none',
+                        borderRight: { xs: 'none', md: index < 6 ? '1px solid black' : 'none' },
+                        borderBottom: { xs: index < 6 ? '1px solid black' : 'none', md: 'none' },
                     }}
                 >
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+                        width: { xs: '67px', md: 'auto' },
+                        justifyContent: { xs: 'center', md: 'flex-start' },
                         gap: '5px',
-                        paddingBottom: '10px',
-                        borderBottom: '1px black solid',
+                        paddingBottom: { md: '10px' },
+                        borderRight: { xs: '1px black solid', md: 'none' },
+                        borderBottom: { xs: 'none', md: '1px black solid' },
                     }}>
                         <Typography sx={{
                             fontSize: '10px',
@@ -50,15 +67,18 @@ export default function WeeklySchedule({
                     </Box>
 
                     <Box sx={{
-                        height: 'calc(100% - 67px)',
-                        overflowY: 'auto',
+                        height: { xs: 'auto', md: 'calc(100% - 67px)' },
+                        width: { xs: 'calc(100% - 67px)', md: 'auto' },
+                        overflowX: { xs: 'auto', md: 'hidden' },
+                        overflowY: { xs: 'hidden', md: 'auto' },
                         scrollbarGutter: 'stable both-edges',
                         display: 'flex',
-                        flexDirection: 'column', 
+                        flexDirection: { xs: 'row', md: 'column' },
                         padding: '10px',
                         gap: '10px',
                         '&::-webkit-scrollbar': {
                             width: '6px',
+                            height: '6px',
                         },
                         '&::-webkit-scrollbar-thumb': {
                             borderRadius: '10px',
@@ -78,14 +98,15 @@ export default function WeeklySchedule({
                                     }}
                                     onClick={() => onViewPartyDetail(party)}
                                 >
-                                    <Typography variant="body2">
+                                    <Typography variant="body2" sx={{ textWrap: { xs: 'nowrap', md: 'wrap' }, }}>
                                         {`${party.groom} & ${party.bride}`}
                                     </Typography>
                                     <Typography variant="caption">
                                         {`${party.shift} - Sảnh ${party.hall}`}
                                     </Typography>
                                 </Box>
-                            ))}
+                            ))
+                        }
                     </Box>
                 </Box>
             ))}
