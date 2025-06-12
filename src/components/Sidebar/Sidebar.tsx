@@ -11,6 +11,7 @@ import {
   Gift,
   ChartArea,
   Settings,
+  LogIn,
 } from 'lucide-react';
 import IconButton from '@mui/material/IconButton';
 
@@ -26,6 +27,8 @@ export default function Sidebar() {
     { path: 'dich-vu', icon: <Gift size={26} />, label: 'Dịch vụ' },
     { path: 'bao-cao', icon: <ChartArea size={26} />, label: 'Báo cáo' },
     { path: 'cai-dat', icon: <Settings size={26} />, label: 'Cài đặt' },
+    //them login
+    { path: 'login', icon: <LogIn size={26} />, label: 'login' },
   ];
 
   return (

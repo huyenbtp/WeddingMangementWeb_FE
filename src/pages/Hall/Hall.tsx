@@ -26,7 +26,6 @@ import {
 } from "@mui/material";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { IParty } from "../../interfaces/hall.interface.ts";
@@ -246,23 +245,7 @@ const initialData: IParty[] = [
     }
 ];
 
-const halls = [
-    "Grand Ballroom A1",
-    "Crystal Hall A2",
-    "Diamond Suite A3",
-    "Pearl Grand B1",
-    "Emerald Ballroom B2",
-    "Jade Terrace B3",
-    "Rose Garden C1",
-    "Orchid Grand C2",
-    "Lily Pavilion C3",
-    "Eastern Charm D1",
-    "Western Elegance D2",
-    "Southern Breeze D3",
-    "Sunrise Hall E1",
-    "Moonlight Venue E2",
-    "Starlight Room E3"
-];
+
 
 export default function HallPage() {
     const [selectedHall, setSelectedHall] = useState<string | null>(null);
@@ -287,9 +270,6 @@ export default function HallPage() {
         setOpenAddHallDialog(false);
     };
 
-    const getPartiesByHall = (hall: string) => {
-        return initialData.filter(party => party.hall === hall);
-    };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
