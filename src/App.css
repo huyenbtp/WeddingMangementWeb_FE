@@ -1,6 +1,17 @@
 .appContainer {
-  height: 100vh;
+  flex: 1; /* Allow appContainer to fill remaining vertical space */
   display: flex;
+}
+
+.appContainer.homepage-layout {
+  justify-content: center; /* Center content when sidebar is hidden */
+}
+
+.appContainer.homepage-layout .content {
+  flex: none; /* Override flex: 1 when homepage-layout is active */
+  width: 100%; /* Ensure it takes full width */
+  max-width: 1200px; /* Optional: limit max width for better readability */
+  margin: auto; /* Center the content box */
 }
 
 .content {
@@ -8,4 +19,6 @@
   height: 100%;
   padding: 15px;
   background-color: #F5F6FA;
+  min-width: 0;
+  overflow: auto;
 }

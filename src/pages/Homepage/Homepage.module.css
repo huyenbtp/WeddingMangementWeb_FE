@@ -1,0 +1,74 @@
+.homepageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh; /* Full viewport height */
+    background-color: #ffffff; /* White background as seen in the image */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logoContainer {
+    margin-bottom: 20px;
+}
+
+.sapoLogo {
+    font-family: 'Arial', sans-serif; /* Example font, adjust as needed */
+    font-size: 60px;
+    font-weight: bold;
+    color: #00B14F; /* Green for "Sa" */
+}
+
+.sapoLogoBlue {
+    color: #007bff; /* Blue for "po" */
+}
+
+.sapoDescription {
+    font-size: 18px;
+    color: #555555;
+    margin-bottom: 30px;
+}
+
+.imagePlaceholder {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Ensure it takes full width to allow centering its content */
+}
+
+.illustrationImage {
+    width: 300px; /* Set a fixed width for the illustration */
+    height: auto;
+}
+
+.sapoCallToAction {
+    font-size: 20px;
+    color: #333333;
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.employeeLoginButton {
+    background-color: #007bff !important; /* Blue background */
+    color: #ffffff !important; /* White text */
+    width: 80%; /* Adjust width as needed */
+    max-width: 300px;
+    margin-bottom: 20px;
+    padding: 15px 0;
+    font-size: 18px;
+    text-transform: none; /* Keep original casing */
+}
+
+.managerLoginButton {
+    color: #007bff !important; /* Blue text */
+    border: none;
+    background: none;
+    width: 80%;
+    max-width: 300px;
+    padding: 15px 0;
+    font-size: 18px;
+    text-transform: none;
+} 

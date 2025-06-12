@@ -31,7 +31,9 @@ export default function Sidebar() {
   return (
     <nav className={`${styles.sidebar} ${!expanded ? styles.sidebarCollapsed : ''}`}>
       <div className={styles.header}>
-        <h1 className={`${styles.headerText} ${!expanded ? styles.collapsed : ''}`}>Welcome</h1>
+        <Link to="/blank-page" className={styles.headerLink}>
+          <h1 className={`${styles.headerText} ${!expanded ? styles.collapsed : ''}`}>Welcome</h1>
+        </Link>
         <IconButton className={styles.expandButton} onClick={() => setExpanded((curr) => !curr)}>
           {expanded ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>

@@ -1,27 +1,179 @@
-export interface IHallInfo {
+export interface IHallInstance {
+    id: number;
+    name: string;
+    type: string;
     image: string;
     description: string;
+    maxCapacity: number;
+    minTablePrice: number;
+    address: string;
+    guests: number;
 }
 
-export const hallInfo: Record<string, IHallInfo> = {
-    A: {
+export const hallInfo: IHallInstance[] = [
+    {
+        id: 1,
+        name: "Grand Ballroom A1",
+        type: "A",
         image: "https://tse4.mm.bing.net/th/id/OIP.KFW7HTBhmDkoxZ7hSFC3DwHaE8?rs=1&pid=ImgDetMain",
-        description: "Sảnh A - Không gian sang trọng, sức chứa lớn, phù hợp cho các buổi tiệc cưới hoành tráng và sự kiện lớn."
+        description: "Sảnh A - Không gian sang trọng, sức chứa lớn, phù hợp cho các buổi tiệc cưới hoành tráng và sự kiện lớn.",
+        maxCapacity: 500,
+        minTablePrice: 1000000,
+        address: "24 Đ. 3 Tháng 2, Phường 12, Quận 10, TP HCM",
+        guests: 420,
     },
-    B: {
+    {
+        id: 2,
+        name: "Crystal Hall A2",
+        type: "A",
+        image: "https://tse4.mm.bing.net/th/id/OIP.KFW7HTBhmDkoxZ7hSFC3DwHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh A - Không gian sang trọng, sức chứa lớn, phù hợp cho các buổi tiệc cưới hoành tráng và sự kiện lớn.",
+        maxCapacity: 450,
+        minTablePrice: 1050000,
+        address: "24 Đ. 3 Tháng 2, Phường 12, Quận 10, TP HCM",
+        guests: 400,
+    },
+    {
+        id: 3,
+        name: "Diamond Suite A3",
+        type: "A",
+        image: "https://tse4.mm.bing.net/th/id/OIP.KFW7HTBhmDkoxZ7hSFC3DwHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh A - Không gian sang trọng, sức chứa lớn, phù hợp cho các buổi tiệc cưới hoành tráng và sự kiện lớn.",
+        maxCapacity: 400,
+        minTablePrice: 1020000,
+        address: "24 Đ. 3 Tháng 2, Phường 12, Quận 10, TP HCM",
+        guests: 380,
+    },
+    {
+        id: 4,
+        name: "Modern View B1",
+        type: "B",
         image: "https://tse1.mm.bing.net/th/id/OIP.bXY6LAkH-IVb-x-0fDxG_gHaE8?rs=1&pid=ImgDetMain",
-        description: "Sảnh B - Thiết kế hiện đại, ánh sáng tự nhiên, lý tưởng cho các buổi tiệc thân mật và ấm cúng."
+        description: "Sảnh B - Thiết kế hiện đại, ánh sáng tự nhiên, lý tưởng cho các buổi tiệc thân mật và ấm cúng.",
+        maxCapacity: 300,
+        minTablePrice: 1100000,
+        address: "194 Hoàng Văn Thụ, Phường 9, Phú Nhuận, TP HCM",
+        guests: 1000,
     },
-    C: {
+    {
+        id: 5,
+        name: "Garden Terrace B2",
+        type: "B",
+        image: "https://tse1.mm.bing.net/th/id/OIP.bXY6LAkH-IVb-x-0fDxG_gHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh B - Thiết kế hiện đại, ánh sáng tự nhiên, lý tưởng cho các buổi tiệc thân mật và ấm cúng.",
+        maxCapacity: 280,
+        minTablePrice: 1150000,
+        address: "194 Hoàng Văn Thụ, Phường 9, Phú Nhuận, TP HCM",
+        guests: 950,
+    },
+    {
+        id: 6,
+        name: "Skyline Lounge B3",
+        type: "B",
+        image: "https://tse1.mm.bing.net/th/id/OIP.bXY6LAkH-IVb-x-0fDxG_gHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh B - Thiết kế hiện đại, ánh sáng tự nhiên, lý tưởng cho các buổi tiệc thân mật và ấm cúng.",
+        maxCapacity: 250,
+        minTablePrice: 1120000,
+        address: "194 Hoàng Văn Thụ, Phường 9, Phú Nhuận, TP HCM",
+        guests: 900,
+    },
+    {
+        id: 7,
+        name: "Open Air C1",
+        type: "C",
         image: "https://tse4.mm.bing.net/th/id/OIP.-iMkX6CTRdiWWCCQl89cIQHaE8?rs=1&pid=ImgDetMain",
-        description: "Sảnh C - Không gian mở, view đẹp, thích hợp cho tiệc cưới ngoài trời và các buổi tiệc nhẹ nhàng."
+        description: "Sảnh C - Không gian mở, view đẹp, thích hợp cho tiệc cưới ngoài trời và các buổi tiệc nhẹ nhàng.",
+        maxCapacity: 200,
+        minTablePrice: 1200000,
+        address: "360D Bến Vân Đồn, Phường 1, Quận 4, Thành phố Hồ Chí Minh",
+        guests: 580,
     },
-    D: {
+    {
+        id: 8,
+        name: "Riverside View C2",
+        type: "C",
+        image: "https://tse4.mm.bing.net/th/id/OIP.-iMkX6CTRdiWWCCQl89cIQHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh C - Không gian mở, view đẹp, thích hợp cho tiệc cưới ngoài trời và các buổi tiệc nhẹ nhàng.",
+        maxCapacity: 180,
+        minTablePrice: 1250000,
+        address: "360D Bến Vân Đồn, Phường 1, Quận 4, Thành phố Hồ Chí Minh",
+        guests: 550,
+    },
+    {
+        id: 9,
+        name: "City Breeze C3",
+        type: "C",
+        image: "https://tse4.mm.bing.net/th/id/OIP.-iMkX6CTRdiWWCCQl89cIQHaE8?rs=1&pid=ImgDetMain",
+        description: "Sảnh C - Không gian mở, view đẹp, thích hợp cho tiệc cưới ngoài trời và các buổi tiệc nhẹ nhàng.",
+        maxCapacity: 150,
+        minTablePrice: 1220000,
+        address: "360D Bến Vân Đồn, Phường 1, Quận 4, Thành phố Hồ Chí Minh",
+        guests: 500,
+    },
+    {
+        id: 10,
+        name: "Classic Elegance D1",
+        type: "D",
         image: "https://mate.vn/wp-content/uploads/2020/11/d5dc00c5fe396b-nhngimnibtlmnngitrangtrticciphongcchcinsangtrng1.jpg",
-        description: "Sảnh D - Phong cách cổ điển, trang trí tinh tế, phù hợp cho các buổi tiệc sang trọng và lịch lãm."
+        description: "Sảnh D - Phong cách cổ điển, trang trí tinh tế, phù hợp cho các buổi tiệc sang trọng và lịch lãm.",
+        maxCapacity: 400,
+        minTablePrice: 1400000,
+        address: "156 Lý Chiêu Hoàng, Phường 10, Quận 6, TP HCM",
+        guests: 1760,
     },
-    E: {
+    {
+        id: 11,
+        name: "Royal Grandeur D2",
+        type: "D",
+        image: "https://mate.vn/wp-content/uploads/2020/11/d5dc00c5fe396b-nhngimnibtlmnngitrangtrticciphongcchcinsangtrng1.jpg",
+        description: "Sảnh D - Phong cách cổ điển, trang trí tinh tế, phù hợp cho các buổi tiệc sang trọng và lịch lãm.",
+        maxCapacity: 380,
+        minTablePrice: 1450000,
+        address: "156 Lý Chiêu Hoàng, Phường 10, Quận 6, TP HCM",
+        guests: 1700,
+    },
+    {
+        id: 12,
+        name: "Vintage Charm D3",
+        type: "D",
+        image: "https://mate.vn/wp-content/uploads/2020/11/d5dc00c5fe396b-nhngimnibtlmnngitrangtrticciphongcchcinsangtrng1.jpg",
+        description: "Sảnh D - Phong cách cổ điển, trang trí tinh tế, phù hợp cho các buổi tiệc sang trọng và lịch lãm.",
+        maxCapacity: 350,
+        minTablePrice: 1420000,
+        address: "156 Lý Chiêu Hoàng, Phường 10, Quận 6, TP HCM",
+        guests: 1650,
+    },
+    {
+        id: 13,
+        name: "Elite Suite E1",
+        type: "E",
         image: "https://linhnga.vn/wp-content/uploads/2021/07/Untitled-2.jpg",
-        description: "Sảnh E - Sảnh VIP, tiện nghi cao cấp, dịch vụ chuyên nghiệp, dành cho các sự kiện đặc biệt."
-    }
-};
+        description: "Sảnh E - Sảnh VIP, tiện nghi cao cấp, dịch vụ chuyên nghiệp, dành cho các sự kiện đặc biệt.",
+        maxCapacity: 600,
+        minTablePrice: 1600000,
+        address: "234 Nguyễn Văn Cừ, Phường Nguyễn Cư Trinh, Quận 1, TP HCM",
+        guests: 700,
+    },
+    {
+        id: 14,
+        name: "Prestige Lounge E2",
+        type: "E",
+        image: "https://linhnga.vn/wp-content/uploads/2021/07/Untitled-2.jpg",
+        description: "Sảnh E - Sảnh VIP, tiện nghi cao cấp, dịch vụ chuyên nghiệp, dành cho các sự kiện đặc biệt.",
+        maxCapacity: 580,
+        minTablePrice: 1650000,
+        address: "234 Nguyễn Văn Cừ, Phường Nguyễn Cư Trinh, Quận 1, TP HCM",
+        guests: 680,
+    },
+    {
+        id: 15,
+        name: "Luxury Pavilion E3",
+        type: "E",
+        image: "https://linhnga.vn/wp-content/uploads/2021/07/Untitled-2.jpg",
+        description: "Sảnh E - Sảnh VIP, tiện nghi cao cấp, dịch vụ chuyên nghiệp, dành cho các sự kiện đặc biệt.",
+        maxCapacity: 550,
+        minTablePrice: 1620000,
+        address: "234 Nguyễn Văn Cừ, Phường Nguyễn Cư Trinh, Quận 1, TP HCM",
+        guests: 650,
+    },
+];
