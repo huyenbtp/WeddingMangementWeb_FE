@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -15,8 +15,21 @@ import {
     TableHead,
     TableRow,
     Paper,
+    TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+    Button,
+    InputAdornment,
 } from "@mui/material";
-import { IParty } from "../../interfaces/party.interface";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { IParty } from "../../interfaces/hall.interface.ts";
 import { hallInfo } from "../../constants/hall.constants";
 
 // Mock data - you should replace this with actual data from your backend
@@ -28,7 +41,8 @@ const initialData: IParty[] = [
         phone: "0912345678",
         date: "2025-06-15",
         shift: "Trưa",
-        hall: "A",
+        hall: "Grand Ballroom A1",
+        type: "A",
         deposit: 10000000,
         tables: 1000000,
         reserveTables: 5,
@@ -41,7 +55,8 @@ const initialData: IParty[] = [
         phone: "0934567890",
         date: "2025-04-20",
         shift: "Tối",
-        hall: "B",
+        hall: "Crystal Hall A2",
+        type: "A",
         deposit: 15000000,
         tables: 50,
         reserveTables: 3,
@@ -54,7 +69,8 @@ const initialData: IParty[] = [
         phone: "0901122334",
         date: "2025-06-25",
         shift: "Trưa",
-        hall: "C",
+        hall: "Diamond Suite A3",
+        type: "A",
         deposit: 12000000,
         tables: 40,
         reserveTables: 2,
@@ -67,7 +83,8 @@ const initialData: IParty[] = [
         phone: "0911223344",
         date: "2025-07-01",
         shift: "Tối",
-        hall: "D",
+        hall: "Pearl Grand B1",
+        type: "B",
         deposit: 20000000,
         tables: 70,
         reserveTables: 4,
@@ -80,7 +97,8 @@ const initialData: IParty[] = [
         phone: "0922334455",
         date: "2025-07-05",
         shift: "Trưa",
-        hall: "E",
+        hall: "Emerald Ballroom B2",
+        type: "B",
         deposit: 11000000,
         tables: 35,
         reserveTables: 2,
@@ -93,7 +111,8 @@ const initialData: IParty[] = [
         phone: "0933445566",
         date: "2025-07-10",
         shift: "Tối",
-        hall: "A",
+        hall: "Jade Terrace B3",
+        type: "B",
         deposit: 18000000,
         tables: 65,
         reserveTables: 5,
@@ -106,7 +125,8 @@ const initialData: IParty[] = [
         phone: "0944556677",
         date: "2025-03-15",
         shift: "Trưa",
-        hall: "B",
+        hall: "Rose Garden C1",
+        type: "C",
         deposit: 13000000,
         tables: 45,
         reserveTables: 3,
@@ -119,7 +139,8 @@ const initialData: IParty[] = [
         phone: "0955667788",
         date: "2025-03-20",
         shift: "Tối",
-        hall: "C",
+        hall: "Orchid Grand C2",
+        type: "C",
         deposit: 17000000,
         tables: 60,
         reserveTables: 4,
@@ -132,7 +153,8 @@ const initialData: IParty[] = [
         phone: "0966778899",
         date: "2025-07-25",
         shift: "Trưa",
-        hall: "D",
+        hall: "Lily Pavilion C3",
+        type: "C",
         deposit: 14000000,
         tables: 55,
         reserveTables: 2,
@@ -145,7 +167,8 @@ const initialData: IParty[] = [
         phone: "0977889900",
         date: "2025-07-30",
         shift: "Tối",
-        hall: "E",
+        hall: "Eastern Charm D1",
+        type: "D",
         deposit: 16000000,
         tables: 50,
         reserveTables: 3,
@@ -158,7 +181,8 @@ const initialData: IParty[] = [
         phone: "0988990011",
         date: "2025-08-04",
         shift: "Trưa",
-        hall: "A",
+        hall: "Western Elegance D2",
+        type: "D",
         deposit: 15500000,
         tables: 42,
         reserveTables: 2,
@@ -171,20 +195,81 @@ const initialData: IParty[] = [
         phone: "0999001122",
         date: "2025-04-09",
         shift: "Tối",
-        hall: "B",
+        hall: "Southern Breeze D3",
+        type: "D",
         deposit: 19000000,
         tables: 70,
         reserveTables: 5,
         status: "Đã tổ chức",
     },
-       // Add more mock data as needed
+    {
+        id: 13,
+        groom: "Nguyễn Văn Minh",
+        bride: "Trần Thị Hương",
+        phone: "0911223344",
+        date: "2025-08-15",
+        shift: "Trưa",
+        hall: "Sunrise Hall E1",
+        type: "E",
+        deposit: 16500000,
+        tables: 55,
+        reserveTables: 3,
+        status: "Đã đặt cọc",
+    },
+    {
+        id: 14,
+        groom: "Lê Văn Phúc",
+        bride: "Phạm Thị Mai",
+        phone: "0922334455",
+        date: "2025-08-20",
+        shift: "Tối",
+        hall: "Moonlight Venue E2",
+        type: "E",
+        deposit: 17500000,
+        tables: 60,
+        reserveTables: 4,
+        status: "Đã đặt cọc",
+    },
+    {
+        id: 15,
+        groom: "Trần Văn Thịnh",
+        bride: "Lê Thị Hà",
+        phone: "0933445566",
+        date: "2025-08-25",
+        shift: "Trưa",
+        hall: "Starlight Room E3",
+        type: "E",
+        deposit: 14500000,
+        tables: 45,
+        reserveTables: 2,
+        status: "Đã đặt cọc",
+    }
 ];
 
-const halls = ["A", "B", "C", "D", "E"];
+const halls = [
+    "Grand Ballroom A1",
+    "Crystal Hall A2",
+    "Diamond Suite A3",
+    "Pearl Grand B1",
+    "Emerald Ballroom B2",
+    "Jade Terrace B3",
+    "Rose Garden C1",
+    "Orchid Grand C2",
+    "Lily Pavilion C3",
+    "Eastern Charm D1",
+    "Western Elegance D2",
+    "Southern Breeze D3",
+    "Sunrise Hall E1",
+    "Moonlight Venue E2",
+    "Starlight Room E3"
+];
 
 export default function HallPage() {
     const [selectedHall, setSelectedHall] = useState<string | null>(null);
     const [parties, setParties] = useState(initialData);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [selectedType, setSelectedType] = useState<string>('all');
+    const [openAddHallDialog, setOpenAddHallDialog] = useState<boolean>(false);
 
     const handleHallClick = (hall: string) => {
         setSelectedHall(hall);
@@ -194,9 +279,39 @@ export default function HallPage() {
         setSelectedHall(null);
     };
 
-    const getPartiesByHall = (hall: string) => {
-        return parties.filter(party => party.hall === hall);
+    const handleOpenAddHallDialog = () => {
+        setOpenAddHallDialog(true);
     };
+
+    const handleCloseAddHallDialog = () => {
+        setOpenAddHallDialog(false);
+    };
+
+    const getPartiesByHall = (hall: string) => {
+        return initialData.filter(party => party.hall === hall);
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const handleTypeChange = (event: SelectChangeEvent<string>) => {
+        setSelectedType(event.target.value);
+    };
+
+    const filteredParties = initialData.filter(party => {
+        const matchesSearch = party.groom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              party.bride.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              party.hall.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesType = selectedType === 'all' || party.type === selectedType;
+        return matchesSearch && matchesType;
+    });
+
+    useEffect(() => {
+        setParties(filteredParties);
+    }, [searchQuery, selectedType]);
+
+    const hallTypes = ["A", "B", "C", "D", "E"];
 
     return (
         <Box sx={{
@@ -221,18 +336,67 @@ export default function HallPage() {
                 Danh sách sảnh
             </Typography>
 
+            <Box sx={{ display: 'flex', gap: 2, marginBottom: '20px' }}>
+                <TextField
+                    label="Tìm kiếm theo tên sảnh, chú rể, cô dâu"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    sx={{ flexGrow: 1, borderRadius: '50px', '& .MuiOutlinedInput-root': { borderRadius: '50px' } }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    placeholder="Tìm kiếm"
+                />
+                <FormControl sx={{ minWidth: 120, borderRadius: '50px', '& .MuiOutlinedInput-root': { borderRadius: '50px' } }}>
+                    <InputLabel id="hall-type-select-label">Loại sảnh</InputLabel>
+                    <Select
+                        labelId="hall-type-select-label"
+                        id="hall-type-select"
+                        value={selectedType}
+                        label="Loại sảnh"
+                        onChange={handleTypeChange}
+                    >
+                        <MenuItem value="all">Tất cả</MenuItem>
+                        {hallTypes.map((type) => (
+                            <MenuItem key={type} value={type}>{`Loại ${type}`}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Button
+                    variant="contained"
+                    startIcon={<AddCircleOutlineIcon />}
+                    sx={{
+                        whiteSpace: 'nowrap',
+                        borderRadius: '50px',
+                        backgroundColor: '#4880FF',
+                        '&:hover': {
+                            backgroundColor: '#3a66cc',
+                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                        },
+                    }}
+                    onClick={handleOpenAddHallDialog}
+                >
+                    Thêm sảnh
+                </Button>
+            </Box>
+
             <Box sx={{ 
                 display: 'flex', 
                 flexWrap: 'wrap', 
                 gap: 3,
                 '& > *': {
-                    flex: '1 1 calc(33.333% - 16px)',
+                    flex: '0 1 calc(33.333% - 16px)',
                     minWidth: '300px'
                 }
             }}>
-                {halls.map((hall) => (
+                {filteredParties.map((party) => (
                     <Card
-                        key={hall}
+                        key={party.hall}
                         sx={{
                             width: '100%',
                             display: 'flex',
@@ -244,12 +408,12 @@ export default function HallPage() {
                                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                             },
                         }}
-                        onClick={() => handleHallClick(hall)}
+                        onClick={() => handleHallClick(party.hall)}
                     >
                         <CardMedia
                             component="img"
-                            image={hallInfo[hall].image}
-                            alt={`Sảnh ${hall}`}
+                            image={hallInfo[party.hall].image}
+                            alt={`Sảnh ${party.hall}`}
                             sx={{
                                 width: '100%',
                                 objectFit: 'cover',
@@ -266,15 +430,24 @@ export default function HallPage() {
                         }}>
                             <Box>
                                 <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1, fontSize: '1.5rem' }}>
-                                    Sảnh {hall}
+                                    Sảnh {party.hall}
                                 </Typography>
                                 <Typography color="text.secondary" sx={{ mb: 2, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                                    {hallInfo[hall].description}
+                                    {hallInfo[party.hall].description}
                                 </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                    <LocationOnIcon sx={{ fontSize: '1rem', mr: 0.5, color: 'text.secondary' }} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        {hallInfo[party.hall].location}
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <TableRestaurantIcon sx={{ fontSize: '1rem', mr: 0.5, color: 'text.secondary' }} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        Tối đa: {hallInfo[party.hall].maxTables} bàn
+                                    </Typography>
+                                </Box>
                             </Box>
-                            <Typography color="primary" sx={{ fontWeight: 'medium', fontSize: '1rem' }}>
-                                Số tiệc đã đặt: {getPartiesByHall(hall).length}
-                            </Typography>
                         </CardContent>
                     </Card>
                 ))}
@@ -287,33 +460,76 @@ export default function HallPage() {
                 fullWidth
             >
                 <DialogTitle>
-                    Thông tin tiệc cưới - Sảnh {selectedHall}
+                    Thông tin sảnh
                 </DialogTitle>
                 <DialogContent>
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Chú rể</TableCell>
-                                    <TableCell>Cô dâu</TableCell>
-                                    <TableCell>Ngày</TableCell>
-                                    <TableCell>Ca</TableCell>
-                                    <TableCell>Trạng thái</TableCell>
+                                    <TableCell>STT</TableCell>
+                                    <TableCell>Tên Sảnh</TableCell>
+                                    <TableCell>Loại Sảnh</TableCell>
+                                    <TableCell>Số Lượng Bàn Tối Đa</TableCell>
+                                    <TableCell>Đơn Giá Bàn Tối Thiểu</TableCell>
+                                    <TableCell>Ghi Chú</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {selectedHall && getPartiesByHall(selectedHall).map((party) => (
-                                    <TableRow key={party.id}>
-                                        <TableCell>{party.groom}</TableCell>
-                                        <TableCell>{party.bride}</TableCell>
-                                        <TableCell>{party.date}</TableCell>
-                                        <TableCell>{party.shift}</TableCell>
-                                        <TableCell>{party.status}</TableCell>
-                                    </TableRow>
-                                ))}
+                                {selectedHall && (() => {
+                                    const hallDetails = hallInfo[selectedHall];
+                                    const hallTypeMatch = selectedHall.match(/([A-E])\d/);
+                                    const hallType = hallTypeMatch ? hallTypeMatch[1] : '';
+
+                                    return (
+                                        <TableRow key={selectedHall}>
+                                            <TableCell>1</TableCell>
+                                            <TableCell>{selectedHall}</TableCell>
+                                            <TableCell>{hallType}</TableCell>
+                                            <TableCell>{hallDetails.maxTables}</TableCell>
+                                            <TableCell>{hallDetails.minPrice.toLocaleString('vi-VN')} VNĐ</TableCell>
+                                            <TableCell>{hallDetails.description}</TableCell>
+                                        </TableRow>
+                                    );
+                                })()}
                             </TableBody>
                         </Table>
                     </TableContainer>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={openAddHallDialog}
+                onClose={handleCloseAddHallDialog}
+                maxWidth="sm"
+                fullWidth
+                BackdropProps={{
+                    style: { backdropFilter: 'blur(5px)' }
+                }}
+            >
+                <DialogTitle>Thêm sảnh mới</DialogTitle>
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <TextField label="Tên Sảnh" variant="outlined" fullWidth />
+                    <FormControl fullWidth>
+                        <InputLabel>Loại Sảnh</InputLabel>
+                        <Select label="Loại Sảnh">
+                            {hallTypes.map((type) => (
+                                <MenuItem key={type} value={type}>{`Loại ${type}`}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <TextField label="Số Lượng Bàn Tối Đa" variant="outlined" type="number" fullWidth />
+                    <TextField label="Đơn Giá Bàn Tối Thiểu" variant="outlined" type="number" fullWidth />
+                    <TextField label="Vị Trí" variant="outlined" fullWidth />
+                    <TextField label="Ghi Chú" variant="outlined" multiline rows={4} fullWidth />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                        <Button onClick={handleCloseAddHallDialog} color="secondary">
+                            Hủy
+                        </Button>
+                        <Button variant="contained" onClick={handleCloseAddHallDialog}>
+                            Lưu
+                        </Button>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </Box>

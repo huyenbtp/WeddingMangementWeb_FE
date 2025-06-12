@@ -6,6 +6,7 @@ export interface IParty {
     date: string;
     shift: string;
     hall: string;
+    type: string;
     deposit: number;
     tables: number;
     reserveTables: number;
