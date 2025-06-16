@@ -1,90 +1,47 @@
 import { useState } from 'react';
 import { serviceList, Service as ServiceType } from './serviceData';
 import './Service.css';
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export default function Service() {
     const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả');
-    const [openAddServiceForm, setOpenAddServiceForm] = useState(false);
-
-    const [newServiceName, setNewServiceName] = useState('');
-    const [newServiceDescription, setNewServiceDescription] = useState('');
-    const [newServicePrice, setNewServicePrice] = useState<number | ''>('');
-    const [newServiceCategory, setNewServiceCategory] = useState('');
-    const [newServiceImage, setNewServiceImage] = useState('');
-    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-
+    const [openAddServiceDialog, setOpenAddServiceDialog] = useState<boolean>(false);
     const categories = ['Tất cả', 'Trang Trí', 'MC & Ca Sĩ', 'Quay Chụp', 'Làm Đẹp', 'Trang Phục', 'Phương Tiện', 'Thiệp & Quà', 'Bánh & Rượu', 'An Ninh'];
 
     const filteredServices = selectedCategory === 'Tất cả' 
         ? serviceList 
         : serviceList.filter(service => service.category === selectedCategory);
 
-    const handleOpenAddServiceForm = () => {
-        setOpenAddServiceForm(true);
+    const handleOpenAddServiceDialog = () => {
+        setOpenAddServiceDialog(true);
     };
 
-    const handleCloseAddServiceForm = () => {
-        setOpenAddServiceForm(false);
-        setNewServiceName('');
-        setNewServiceDescription('');
-        setNewServicePrice('');
-        setNewServiceCategory('');
-        setNewServiceImage('');
-        setSelectedImageFile(null);
-    };
-
-    const handleAddServiceSubmit = () => {
-        console.log('Adding new service:', {
-            name: newServiceName,
-            description: newServiceDescription,
-            price: newServicePrice,
-            category: newServiceCategory,
-            image: newServiceImage,
-        });
-        handleCloseAddServiceForm();
-    };
-
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setNewServiceImage(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setSelectedImageFile(null);
-            setNewServiceImage('');
-        }
+    const handleCloseAddServiceDialog = () => {
+        setOpenAddServiceDialog(false);
     };
 
     return (
         <div className="service-container">
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h2>Dịch Vụ Đám Cưới</h2>
                 <Button
                     variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleOpenAddServiceForm}
-                    sx={{ backgroundColor: '#4880FF', '&:hover': { backgroundColor: '#000000' } }}
+                    startIcon={<AddCircleOutlineIcon />}
+                    sx={{
+                        whiteSpace: 'nowrap',
+                        borderRadius: '50px',
+                        backgroundColor: '#4880FF',
+                        '&:hover': {
+                            backgroundColor: '#3a66cc',
+                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                        },
+                    }}
+                    onClick={handleOpenAddServiceDialog}
                 >
-                    Thêm dịch vụ mới
+                    Thêm dịch vụ
                 </Button>
-            </Box>
+            </div>
             
             <div className="category-filter">
                 {categories.map(category => (
@@ -112,78 +69,35 @@ export default function Service() {
                 ))}
             </div>
 
-            {/* Add New Service Form Dialog */}
             <Dialog
-                open={openAddServiceForm}
-                onClose={handleCloseAddServiceForm}
+                open={openAddServiceDialog}
+                onClose={handleCloseAddServiceDialog}
                 maxWidth="sm"
                 fullWidth
+                BackdropProps={{
+                    style: { backdropFilter: 'blur(5px)' }
+                }}
             >
                 <DialogTitle>Thêm dịch vụ mới</DialogTitle>
-                <DialogContent>
-                    <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
-                        <TextField
-                            label="Tên dịch vụ"
-                            value={newServiceName}
-                            onChange={(e) => setNewServiceName(e.target.value)}
-                            fullWidth
-                            size="small"
-                        />
-                        <TextField
-                            label="Mô tả"
-                            value={newServiceDescription}
-                            onChange={(e) => setNewServiceDescription(e.target.value)}
-                            fullWidth
-                            multiline
-                            rows={2}
-                            size="small"
-                        />
-                        <TextField
-                            label="Giá (VNĐ)"
-                            type="number"
-                            value={newServicePrice}
-                            onChange={(e) => setNewServicePrice(Number(e.target.value))}
-                            fullWidth
-                            size="small"
-                        />
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Danh mục</InputLabel>
-                            <Select
-                                value={newServiceCategory}
-                                label="Danh mục"
-                                onChange={(e) => setNewServiceCategory(e.target.value as string)}
-                            >
-                                {categories.filter(cat => cat !== 'Tất cả').map(cat => (
-                                    <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            sx={{ mt: 1, mb: 1, backgroundColor: '#6c757d', '&:hover': { backgroundColor: '#5a6268' } }}
-                        >
-                            Chọn hình ảnh
-                            <input
-                                type="file"
-                                hidden
-                                accept="image/*"
-                                onChange={handleImageChange}
-                            />
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <TextField label="Tên dịch vụ" variant="outlined" fullWidth />
+                    <FormControl fullWidth>
+                        <InputLabel>Danh mục</InputLabel>
+                        <Select label="Danh mục">
+                            {categories.filter(cat => cat !== 'Tất cả').map(category => (
+                                <MenuItem key={category} value={category}>{category}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <TextField label="Mô tả" variant="outlined" multiline rows={4} fullWidth />
+                    <TextField label="Giá" variant="outlined" type="number" fullWidth />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                        <Button onClick={handleCloseAddServiceDialog} color="secondary">
+                            Hủy
                         </Button>
-                        {newServiceImage && (
-                            <Box sx={{ mt: 2, textAlign: 'center' }}>
-                                <img src={newServiceImage} alt="Xem trước hình ảnh" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} />
-                            </Box>
-                        )}
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
-                            <Button variant="outlined" onClick={handleCloseAddServiceForm}>
-                                Hủy
-                            </Button>
-                            <Button variant="contained" onClick={handleAddServiceSubmit} sx={{ backgroundColor: '#4880FF', '&:hover': { backgroundColor: '#000000' } }}>
-                                Thêm dịch vụ
-                            </Button>
-                        </Box>
+                        <Button variant="contained" onClick={handleCloseAddServiceDialog}>
+                            Lưu
+                        </Button>
                     </Box>
                 </DialogContent>
             </Dialog>

@@ -1,90 +1,81 @@
 import { useState } from 'react';
 import { foodList, Food as FoodType } from './foodData';
 import './Food.css';
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export default function Food() {
     const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả');
-    const [openAddFoodForm, setOpenAddFoodForm] = useState(false);
-
-    const [newFoodName, setNewFoodName] = useState('');
-    const [newFoodDescription, setNewFoodDescription] = useState('');
-    const [newFoodPrice, setNewFoodPrice] = useState<number | ''>('');
-    const [newFoodCategory, setNewFoodCategory] = useState('');
-    const [newFoodImage, setNewFoodImage] = useState('');
-    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-
+    const [openDialog, setOpenDialog] = useState(false);
+    const [newFood, setNewFood] = useState({
+        name: '',
+        description: '',
+        price: '',
+        category: '',
+        image: null as File | null,
+    });
     const categories = ['Tất cả', 'Món Khai Vị', 'Món Chính', 'Món Súp', 'Món Xào', 'Món Cơm', 'Món Ăn Kèm'];
 
     const filteredFoods = selectedCategory === 'Tất cả' 
         ? foodList 
         : foodList.filter(food => food.category === selectedCategory);
 
-    const handleOpenAddFoodForm = () => {
-        setOpenAddFoodForm(true);
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
     };
 
-    const handleCloseAddFoodForm = () => {
-        setOpenAddFoodForm(false);
-        setNewFoodName('');
-        setNewFoodDescription('');
-        setNewFoodPrice('');
-        setNewFoodCategory('');
-        setNewFoodImage('');
-        setSelectedImageFile(null);
-    };
-
-    const handleAddFoodSubmit = () => {
-        console.log('Adding new food:', {
-            name: newFoodName,
-            description: newFoodDescription,
-            price: newFoodPrice,
-            category: newFoodCategory,
-            image: newFoodImage,
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setNewFood({
+            name: '',
+            description: '',
+            price: '',
+            category: '',
+            image: null,
         });
-        handleCloseAddFoodForm();
     };
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setNewFoodImage(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setSelectedImageFile(null);
-            setNewFoodImage('');
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewFood(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setNewFood(prev => ({
+                ...prev,
+                image: e.target.files![0],
+            }));
         }
+    };
+
+    const handleSubmit = () => {
+        // Xử lý thêm món ăn mới ở đây
+        console.log('New food:', newFood);
+        handleCloseDialog();
     };
 
     return (
         <div className="food-container">
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h2>Danh Sách Món Ăn</h2>
                 <Button
                     variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleOpenAddFoodForm}
-                    sx={{ backgroundColor: '#4880FF', '&:hover': { backgroundColor: '#000000' } }}
+                    startIcon={<AddCircleOutlineIcon />}
+                    sx={{
+                        bgcolor: '#4880FF',
+                        '&:hover': {
+                            bgcolor: '#3660CC',
+                        },
+                    }}
+                    onClick={handleOpenDialog}
                 >
-                    Thêm món ăn mới
+                    Thêm món ăn
                 </Button>
-            </Box>
+            </div>
             
             <div className="category-filter">
                 {categories.map(category => (
@@ -112,80 +103,78 @@ export default function Food() {
                 ))}
             </div>
 
-            {/* Add New Food Form Dialog */}
-            <Dialog
-                open={openAddFoodForm}
-                onClose={handleCloseAddFoodForm}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle>Thêm món ăn mới</DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth BackdropProps={{ style: { backdropFilter: 'blur(5px)' } }}>
+                <DialogTitle>Thêm Món Ăn Mới</DialogTitle>
                 <DialogContent>
-                    <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
-                        <TextField
-                            label="Tên món ăn"
-                            value={newFoodName}
-                            onChange={(e) => setNewFoodName(e.target.value)}
-                            fullWidth
-                            size="small"
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        name="name"
+                        label="Tên món ăn"
+                        type="text"
+                        fullWidth
+                        value={newFood.name}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="dense"
+                        name="description"
+                        label="Mô tả"
+                        type="text"
+                        fullWidth
+                        multiline
+                        rows={4}
+                        value={newFood.description}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="dense"
+                        name="price"
+                        label="Giá"
+                        type="number"
+                        fullWidth
+                        value={newFood.price}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        margin="dense"
+                        name="category"
+                        label="Danh mục"
+                        select
+                        fullWidth
+                        value={newFood.category}
+                        onChange={handleInputChange}
+                    >
+                        {categories.filter(cat => cat !== 'Tất cả').map(category => (
+                            <MenuItem key={category} value={category}>
+                                {category}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    >
+                        Tải ảnh món ăn
+                        <input
+                            type="file"
+                            hidden
+                            accept="image/*"
+                            onChange={handleImageChange}
                         />
-                        <TextField
-                            label="Mô tả"
-                            value={newFoodDescription}
-                            onChange={(e) => setNewFoodDescription(e.target.value)}
-                            fullWidth
-                            multiline
-                            rows={2}
-                            size="small"
-                        />
-                        <TextField
-                            label="Giá (VNĐ)"
-                            type="number"
-                            value={newFoodPrice}
-                            onChange={(e) => setNewFoodPrice(Number(e.target.value))}
-                            fullWidth
-                            size="small"
-                        />
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Danh mục</InputLabel>
-                            <Select
-                                value={newFoodCategory}
-                                label="Danh mục"
-                                onChange={(e) => setNewFoodCategory(e.target.value as string)}
-                            >
-                                {categories.filter(cat => cat !== 'Tất cả').map(cat => (
-                                    <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            sx={{ mt: 1, mb: 1, backgroundColor: '#6c757d', '&:hover': { backgroundColor: '#5a6268' } }}
-                        >
-                            Chọn hình ảnh
-                            <input
-                                type="file"
-                                hidden
-                                accept="image/*"
-                                onChange={handleImageChange}
-                            />
-                        </Button>
-                        {newFoodImage && (
-                            <Box sx={{ mt: 2, textAlign: 'center' }}>
-                                <img src={newFoodImage} alt="Xem trước hình ảnh" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} />
-                            </Box>
-                        )}
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
-                            <Button variant="outlined" onClick={handleCloseAddFoodForm}>
-                                Hủy
-                            </Button>
-                            <Button variant="contained" onClick={handleAddFoodSubmit} sx={{ backgroundColor: '#4880FF', '&:hover': { backgroundColor: '#000000' } }}>
-                                Thêm món
-                            </Button>
-                        </Box>
-                    </Box>
+                    </Button>
+                    {newFood.image && (
+                        <p style={{ marginTop: '8px' }}>Đã chọn: {newFood.image.name}</p>
+                    )}
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog}>Hủy</Button>
+                    <Button onClick={handleSubmit} variant="contained" color="primary">
+                        Thêm món
+                    </Button>
+                </DialogActions>
             </Dialog>
         </div>
     );

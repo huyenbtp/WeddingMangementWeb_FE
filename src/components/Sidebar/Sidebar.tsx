@@ -11,6 +11,7 @@ import {
   Gift,
   ChartArea,
   Settings,
+  LogIn,
 } from 'lucide-react';
 import IconButton from '@mui/material/IconButton';
 
@@ -26,14 +27,14 @@ export default function Sidebar() {
     { path: 'dich-vu', icon: <Gift size={26} />, label: 'Dịch vụ' },
     { path: 'bao-cao', icon: <ChartArea size={26} />, label: 'Báo cáo' },
     { path: 'cai-dat', icon: <Settings size={26} />, label: 'Cài đặt' },
+    //them login
+    { path: 'login', icon: <LogIn size={26} />, label: 'login' },
   ];
 
   return (
     <nav className={`${styles.sidebar} ${!expanded ? styles.sidebarCollapsed : ''}`}>
       <div className={styles.header}>
-        <Link to="/blank-page" className={styles.headerLink}>
-          <h1 className={`${styles.headerText} ${!expanded ? styles.collapsed : ''}`}>Welcome</h1>
-        </Link>
+        <h1 className={`${styles.headerText} ${!expanded ? styles.collapsed : ''}`}>Welcome</h1>
         <IconButton className={styles.expandButton} onClick={() => setExpanded((curr) => !curr)}>
           {expanded ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>
