@@ -1,3 +1,13 @@
+export interface IHall {
+    id: string;
+    name: string;
+    type: string;
+    maxTable: number;
+    minTablePrice: number;
+    description: string;
+    image: string;
+}
+
 export interface IParty {
     id: number;
     groom: string;

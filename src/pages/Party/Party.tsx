@@ -11,13 +11,15 @@ import { PlusCircle, } from "lucide-react";
 import PartyTable from "./PartyTable";
 import { IParty } from "../../interfaces/party.interface";
 import ConfirmDelete from "../../components/Alert/ConfirmDelete/ConfirmDelete";
-import PartyForm from "./PartyForm";
+import PartyForm from "../../components/Form/PartyForm";
+import BillForm from "../../components/Form/BillForm";
 import PartyFilter from "../../components/Filter/PartyFilter";
 import SearchBar from "../../components/SearchBar"
 import { DatePicker, } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { useNavigate } from "react-router-dom";
 
 type PartyKey = keyof IParty;
 
@@ -182,6 +184,8 @@ const initialData: IParty[] = [
 
 
 export default function PartyPage() {
+    const navigate = useNavigate();
+
     const [parties, setParties] = useState(initialData);
     const [searchKey, setSearchKey] = useState("");
     const [searchBy, setSearchBy] = useState<PartyKey>("groom");
@@ -189,8 +193,10 @@ export default function PartyPage() {
     const [filterHall, setFilterHall] = useState("");
     const [fromDate, setFromDate] = useState((dayjs().startOf("year")).toString());
     const [toDate, setToDate] = useState((dayjs().endOf("year")).toString());
-    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isPartyFormOpen, setIsPartyFormOpen] = useState(false);
+    const [isBillFormOpen, setIsBillFormOpen] = useState(false);
     const [editData, setEditData] = useState<IParty | null>(null);
+    const [billPartyData, setBillPartyData] = useState<IParty | null>(null);
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
@@ -214,20 +220,18 @@ export default function PartyPage() {
     })
 
     const handleAdd = () => {
-        setEditData(null);
-        setIsFormOpen(true);
+        navigate("/dat-tiec");
     };
 
     const handleEdit = (party: IParty) => {
         setEditData(party);
-        setIsFormOpen(true);
+        setIsPartyFormOpen(true);
     };
 
     const handleDelete = (id: any) => {
         setDeleteId(id);
         setIsDeleteConfirmOpen(true);
     };
-
 
     return (
         <Box sx={{
@@ -266,11 +270,13 @@ export default function PartyPage() {
                     width: "80%",
                     alignItems: 'flex-end',
                 }}>
-                    <SearchBar
-                        value={searchKey}
-                        onChange={(e) => setSearchKey(e.target.value)}
-                    />
-
+                    <Box sx={{ flex: 2 }}>
+                        <SearchBar
+                            value={searchKey}
+                            onChange={(e) => setSearchKey(e.target.value)}
+                        />
+                    </Box>
+                    
                     <FormControl
                         sx={{
                             flex: 1,
@@ -550,18 +556,30 @@ export default function PartyPage() {
 
             {/* Form + ConfirmDelete */}
             <PartyForm
-                open={isFormOpen}
-                onClose={() => setIsFormOpen(false)}
+                open={isPartyFormOpen}
+                onClose={() => setIsPartyFormOpen(false)}
                 onSubmit={(_data) => {
                     if (editData) {
                         // update logic
                     } else {
                         // add logic
                     }
-                    setIsFormOpen(false);
+                    setIsPartyFormOpen(false);
+                }}
+                onExportBill={(partyData) => {
+                    setBillPartyData(partyData);
+                    setIsPartyFormOpen(false);
+                    setIsBillFormOpen(true);
                 }}
                 initialData={editData}
                 readOnly={false}
+            />
+
+            <BillForm
+                open={isBillFormOpen}
+                onClose={() => setIsBillFormOpen(false)}
+                initialData={billPartyData}
+                readOnly={true}
             />
 
             <ConfirmDelete

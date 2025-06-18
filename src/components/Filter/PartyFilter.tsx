@@ -5,7 +5,7 @@ import {
     Select,
     MenuItem,
 } from "@mui/material";
-import { defaultBgColorMap, defaultTextColorMap } from "../../pages/Party/PartyTable";
+import { defaultBgColorMap, defaultTextColorMap } from "../../assets/color/ColorMap";
 
 export default function PartyFilter({
     label,

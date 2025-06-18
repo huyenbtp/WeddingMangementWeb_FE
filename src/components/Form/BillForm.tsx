@@ -12,22 +12,20 @@ import {
     FormControl,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { defaultBgColorMap, defaultTextColorMap } from "./PartyTable";
+import { defaultBgColorMap, defaultTextColorMap } from "../../assets/color/ColorMap";
 import { DatePicker, } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-export default function PartyForm({
+export default function BillForm({
     open,
     onClose,
-    onSubmit,
     initialData,
     readOnly,
 }: {
     open: boolean;
     onClose: () => void;
-    onSubmit: (data: any) => void;
     initialData?: any;
     readOnly: boolean
 }) {
@@ -90,12 +88,7 @@ export default function PartyForm({
                 fontWeight: 'bold',
                 textAlign: 'center',
             }}>
-                {readOnly ?
-                    "Thông tin tiệc"
-                    : initialData ?
-                        "Cập nhật thông tin tiệc"
-                        : "Đặt tiệc"
-                }
+                Hóa đơn
             </DialogTitle>
 
             <DialogContent>
@@ -113,9 +106,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tên chú rể
                         </Typography>
-                        <TextField fullWidth value={form.groom}
-                            placeholder="Nhập tên chú rể"
-                            onChange={(e) => setForm({ ...form, groom: e.target.value })} />
+                        <TextField fullWidth value={form.groom} />
                     </Box>
 
                     <Box sx={{
@@ -125,9 +116,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tên cô dâu
                         </Typography>
-                        <TextField fullWidth value={form.bride}
-                            placeholder="Nhập tên tô dâu"
-                            onChange={(e) => setForm({ ...form, bride: e.target.value })} />
+                        <TextField fullWidth value={form.bride} />
                     </Box>
 
                     <Box sx={{
@@ -137,9 +126,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số điện thoại
                         </Typography>
-                        <TextField fullWidth value={form.phone}
-                            placeholder="Nhập số điện thoại"
-                            onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                        <TextField fullWidth value={form.phone} />
                     </Box>
 
                     <Box sx={{
@@ -369,9 +356,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Tiền cọc
                         </Typography>
-                        <TextField fullWidth value={form.deposit}
-                            placeholder="Nhập tiền cọc"
-                            onChange={(e) => setForm({ ...form, deposit: Number(e.target.value) })} />
+                        <TextField fullWidth value={form.deposit} />
                     </Box>
 
                     <Box sx={{
@@ -381,9 +366,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số lượng bàn
                         </Typography>
-                        <TextField fullWidth value={form.tables}
-                            placeholder="Nhập số lượng bàn"
-                            onChange={(e) => setForm({ ...form, tables: Number(e.target.value) })} />
+                        <TextField fullWidth value={form.tables} />
                     </Box>
 
                     <Box sx={{
@@ -393,9 +376,7 @@ export default function PartyForm({
                         <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                             Số bàn dự trữ
                         </Typography>
-                        <TextField fullWidth value={form.reserveTables}
-                            placeholder="Nhập số bàn dự trữ"
-                            onChange={(e) => setForm({ ...form, reserveTables: Number(e.target.value) })} />
+                        <TextField fullWidth value={form.reserveTables} />
                     </Box>
                 </Box>
             </DialogContent>
@@ -417,7 +398,7 @@ export default function PartyForm({
                     >
                         Huỷ
                     </Button>
-                    <Button onClick={() => onSubmit(form)} variant="contained"
+                    <Button variant="contained"
                         sx={{
                             fontSize: "14px",
                             fontWeight: "bold",

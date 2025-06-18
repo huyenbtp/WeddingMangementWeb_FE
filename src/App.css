@@ -1,5 +1,5 @@
 .appContainer {
-  flex: 1; /* Allow appContainer to fill remaining vertical space */
+  height: 100vh;
   display: flex;
 }
 
@@ -19,6 +19,4 @@
   height: 100%;
   padding: 15px;
   background-color: #F5F6FA;
-  min-width: 0;
-  overflow: auto;
 }

@@ -1,6 +1,6 @@
 import { Box, Typography, } from "@mui/material";
 import { IParty } from "../../interfaces/party.interface";
-import { defaultBgColorMap, } from "../Party/PartyTable";
+import { defaultBgColorMap, } from "../../assets/color/ColorMap";
 import dayjs from "dayjs";
 
 export default function WeeklySchedule({

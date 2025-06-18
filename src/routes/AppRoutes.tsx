@@ -8,10 +8,12 @@ import Report from "../pages/Report/Report";
 import Settings from "../pages/Settings/Settings.tsx";
 import Login from "../pages/Login/Login.tsx"
 import Register from "../pages/Login/Register.tsx"
+import PartyBooking from "../pages/PartyBooking/PartyBooking.tsx";
 
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/dat-tiec" element={<PartyBooking />} />
       <Route path="/sanh-tiec" element={<Hall />} />
       <Route path="/tiec-cuoi" element={<Party />} />
       <Route path="/lich-su-kien/:view" element={<Schedule />} />

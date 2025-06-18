@@ -21,8 +21,8 @@ export default function SearchBar({
             required
             value={value}
             onChange={onChange}
+            fullWidth
             sx={{
-                flex: 2,
                 "& fieldset": {
                     borderRadius: "10px",
                 },

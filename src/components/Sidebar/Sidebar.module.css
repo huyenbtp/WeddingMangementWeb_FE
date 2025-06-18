@@ -21,43 +21,36 @@
 }
 
 .header {
+    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    z-index: 10;
-}
-
-.headerLink {
-    text-decoration: none;
-    color: inherit;
+    margin-bottom: 30px;
 }
 
 .headerText {
-    margin: 0;
-    font-size: 24px;
-}
-
-.headerText.collapsed {
-    width: 0;
-    opacity: 0;
-    visibility: hidden;
+    width: 150px;
+    margin: 0px;
+    margin-left: 15px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #4880FF;
+    overflow: hidden;
+    transition: all 0.1s ease;
+    text-decoration: none;
 }
 
 .expandButton {
-    background: none;
+    height: 56px;
+    width: 56px;
+    border-radius: 50px;
     border: none;
+    background-color: rgb(249, 249, 249);
     cursor: pointer;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    transition: transform 0.3s ease-in-out;
+}
+
+.expandButton:hover {
+    background-color: rgb(249, 249, 249);
 }
 
 .sidebarList {

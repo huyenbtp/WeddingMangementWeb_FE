@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { Box, Typography, IconButton, ToggleButtonGroup, ToggleButton, Popover, Button } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IParty } from "../../interfaces/party.interface";
-import PartyForm from "../Party/PartyForm";
+import PartyForm from "../../components/Form/PartyForm";
 import WeeklySchedule from "./WeeklySchedule";
+import MonthlySchedule from "./MonthlySchedule";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from 'react-router-dom';
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import MonthlySchedule from "./MonthlySchedule";
-
-// Extend dayjs with necessary plugins\
 
 const initialData: IParty[] = [
   {
@@ -413,6 +411,7 @@ export default function Schedule() {
         open={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         onSubmit={() => { }}
+        onExportBill={() => { }}
         initialData={detailData}
         readOnly={true}
       />
