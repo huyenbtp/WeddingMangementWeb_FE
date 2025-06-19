@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { foodList, Food as FoodType } from './foodData';
 import './Food.css';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import FoodAddDialog from './FoodAddDialog.tsx';
+import ConfirmDelete from '../../components/Alert/ConfirmDelete/ConfirmDelete';
+import EditIcon from '@mui/icons-material/Edit';
+import FoodEditDialog from './FoodEditDialog.tsx';
 
 export default function Food() {
     const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả');
@@ -15,14 +20,15 @@ export default function Food() {
         image: null as File | null,
     });
     const categories = ['Tất cả', 'Món Khai Vị', 'Món Chính', 'Món Súp', 'Món Xào', 'Món Cơm', 'Món Ăn Kèm'];
+    const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [foodToDelete, setFoodToDelete] = useState<FoodType | null>(null);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [foodToEdit, setFoodToEdit] = useState<FoodType | null>(null);
 
     const filteredFoods = selectedCategory === 'Tất cả' 
         ? foodList 
         : foodList.filter(food => food.category === selectedCategory);
-
-    const handleOpenDialog = () => {
-        setOpenDialog(true);
-    };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
@@ -34,28 +40,44 @@ export default function Food() {
             image: null,
         });
     };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewFood(prev => ({
-            ...prev,
-            [name]: value,
-        }));
+    const handleOpenAddDialog = () => {
+        setAddDialogOpen(true);
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setNewFood(prev => ({
-                ...prev,
-                image: e.target.files![0],
-            }));
-        }
+    const handleCloseAddDialog = () => {
+        setAddDialogOpen(false);
     };
 
-    const handleSubmit = () => {
+    const handleAddFood = (data: any) => {
         // Xử lý thêm món ăn mới ở đây
-        console.log('New food:', newFood);
-        handleCloseDialog();
+        // Ví dụ: thêm vào foodList hoặc state foods nếu có
+        setAddDialogOpen(false);
+    };
+
+    const handleDeleteClick = (food: FoodType) => {
+        setFoodToDelete(food);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        // Xử lý xóa món ăn ở đây
+        setDeleteDialogOpen(false);
+        setFoodToDelete(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setFoodToDelete(null);
+    };
+
+    const handleEditClick = (food: FoodType) => {
+        setFoodToEdit(food);
+        setEditDialogOpen(true);
+    };
+
+    const handleCloseEditDialog = () => {
+        setEditDialogOpen(false);
+        setFoodToEdit(null);
     };
 
     return (
@@ -71,7 +93,7 @@ export default function Food() {
                             bgcolor: '#3660CC',
                         },
                     }}
-                    onClick={handleOpenDialog}
+                    onClick={handleOpenAddDialog}
                 >
                     Thêm món ăn
                 </Button>
@@ -89,93 +111,99 @@ export default function Food() {
                 ))}
             </div>
 
-            <div className="food-grid">
+            <div className="food-grid" style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 24,
+                justifyContent: 'flex-start',
+            }}>
                 {filteredFoods.map((food: FoodType) => (
-                    <div key={food.id} className="food-card">
+                    <div key={food.id} className="food-card" style={{
+                        flex: '0 1 calc(25% - 18px)',
+                        minWidth: '240px',
+                        maxWidth: '1fr',
+                        position: 'relative',
+                    }}>
+                        <div style={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            display: 'flex',
+                            gap: 8,
+                            zIndex: 2
+                        }}>
+                            <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleEditClick(food)}>
+                                <Box
+                                    sx={{
+                                        bgcolor: '#fff',
+                                        borderRadius: '50%',
+                                        p: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                        transition: 'background 0.2s, box-shadow 0.2s',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            bgcolor: '#f0f0f0',
+                                            boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                                            '& .MuiSvgIcon-root': { opacity: 1 }
+                                        }
+                                    }}
+                                >
+                                    <EditIcon fontSize="small" sx={{ color: '#00e1ff', opacity: 0.85, transition: 'opacity 0.2s' }} />
+                                </Box>
+                            </Button>
+                            <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleDeleteClick(food)}>
+                                <Box
+                                    sx={{
+                                        bgcolor: '#fff',
+                                        borderRadius: '50%',
+                                        p: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                        transition: 'background 0.2s, box-shadow 0.2s',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            bgcolor: '#f0f0f0',
+                                            boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                                            '& .MuiSvgIcon-root': { opacity: 1 }
+                                        }
+                                    }}
+                                >
+                                    <DeleteOutline fontSize="small" sx={{ color: '#ff0000', opacity: 0.85, transition: 'opacity 0.2s' }} />
+                                </Box>
+                            </Button>
+                        </div>
                         <img src={food.image} alt={food.name} className="food-image" />
                         <div className="food-info">
                             <h3>{food.name}</h3>
                             <p>{food.description}</p>
                             <p className="food-price">{food.price.toLocaleString('vi-VN')} VNĐ</p>
-                            <button className="select-btn">Chọn món</button>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth BackdropProps={{ style: { backdropFilter: 'blur(5px)' } }}>
-                <DialogTitle>Thêm Món Ăn Mới</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        name="name"
-                        label="Tên món ăn"
-                        type="text"
-                        fullWidth
-                        value={newFood.name}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        name="description"
-                        label="Mô tả"
-                        type="text"
-                        fullWidth
-                        multiline
-                        rows={4}
-                        value={newFood.description}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        name="price"
-                        label="Giá"
-                        type="number"
-                        fullWidth
-                        value={newFood.price}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        name="category"
-                        label="Danh mục"
-                        select
-                        fullWidth
-                        value={newFood.category}
-                        onChange={handleInputChange}
-                    >
-                        {categories.filter(cat => cat !== 'Tất cả').map(category => (
-                            <MenuItem key={category} value={category}>
-                                {category}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <Button
-                        variant="outlined"
-                        component="label"
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                        Tải ảnh món ăn
-                        <input
-                            type="file"
-                            hidden
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-                    </Button>
-                    {newFood.image && (
-                        <p style={{ marginTop: '8px' }}>Đã chọn: {newFood.image.name}</p>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog}>Hủy</Button>
-                    <Button onClick={handleSubmit} variant="contained" color="primary">
-                        Thêm món
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <FoodAddDialog
+                open={addDialogOpen}
+                onClose={handleCloseAddDialog}
+                onSave={handleAddFood}
+                categories={categories}
+            />
+            <ConfirmDelete
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+            />
+            <FoodEditDialog
+                open={editDialogOpen}
+                onClose={handleCloseEditDialog}
+                food={foodToEdit}
+                categories={categories}
+            />
         </div>
     );
 }

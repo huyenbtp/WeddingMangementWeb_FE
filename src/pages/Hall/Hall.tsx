@@ -28,8 +28,14 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { IParty } from "../../interfaces/hall.interface.ts";
-import { hallInfo } from "../../constants/hall.constants";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ConfirmDelete from '../../components/Alert/ConfirmDelete/ConfirmDelete';
+import AddHallDialog from './AddHallDialog.tsx';
+import EditHallDialog from './EditHallDialog.tsx';
+import { hallInfo, IHallInfo } from './hallInfo.mock';
+import { IParty } from '../../interfaces/hall.interface';
 
 // Mock data - you should replace this with actual data from your backend
 const initialData: IParty[] = [
@@ -253,6 +259,10 @@ export default function HallPage() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedType, setSelectedType] = useState<string>('all');
     const [openAddHallDialog, setOpenAddHallDialog] = useState<boolean>(false);
+    const [openConfirmDelete, setOpenConfirmDelete] = useState<boolean>(false);
+    const [hallToDelete, setHallToDelete] = useState<string | null>(null);
+    const [openEditHallDialog, setOpenEditHallDialog] = useState<boolean>(false);
+    const [hallToEdit, setHallToEdit] = useState<string | null>(null);
 
     const handleHallClick = (hall: string) => {
         setSelectedHall(hall);
@@ -270,6 +280,21 @@ export default function HallPage() {
         setOpenAddHallDialog(false);
     };
 
+    const handleDeleteClick = (hall: string) => {
+        setHallToDelete(hall);
+        setOpenConfirmDelete(true);
+    };
+
+    const handleCloseConfirmDelete = () => {
+        setOpenConfirmDelete(false);
+        setHallToDelete(null);
+    };
+
+    const handleConfirmDelete = () => {
+        // TODO: Xử lý xóa sảnh ở đây
+        setOpenConfirmDelete(false);
+        setHallToDelete(null);
+    };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -277,6 +302,16 @@ export default function HallPage() {
 
     const handleTypeChange = (event: SelectChangeEvent<string>) => {
         setSelectedType(event.target.value);
+    };
+
+    const handleEditClick = (hall: string) => {
+        setHallToEdit(hall);
+        setOpenEditHallDialog(true);
+    };
+
+    const handleCloseEditHallDialog = () => {
+        setOpenEditHallDialog(false);
+        setHallToEdit(null);
     };
 
     const filteredParties = initialData.filter(party => {
@@ -370,8 +405,9 @@ export default function HallPage() {
                 flexWrap: 'wrap', 
                 gap: 3,
                 '& > *': {
-                    flex: '0 1 calc(33.333% - 16px)',
-                    minWidth: '300px'
+                    flex: '0 1 calc(25% - 18px)',
+                    minWidth: '240px',
+                    maxWidth: '1fr',
                 }
             }}>
                 {filteredParties.map((party) => (
@@ -387,9 +423,63 @@ export default function HallPage() {
                                 transform: 'scale(1.02)',
                                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                             },
+                            position: 'relative',
                         }}
                         onClick={() => handleHallClick(party.hall)}
                     >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            display: 'flex',
+                            gap: 1,
+                            zIndex: 2,
+                        }} onClick={e => e.stopPropagation()}>
+                            <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleEditClick(party.hall)}>
+                                <Box
+                                    sx={{
+                                        bgcolor: '#fff',
+                                        borderRadius: '50%',
+                                        p: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                        transition: 'background 0.2s, box-shadow 0.2s',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            bgcolor: '#f0f0f0',
+                                            boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                                            '& .MuiSvgIcon-root': { opacity: 1 }
+                                        }
+                                    }}
+                                >
+                                    <EditIcon fontSize="small" sx={{ color: '#00e1ff', opacity: 0.85, transition: 'opacity 0.2s' }} />
+                                </Box>
+                            </Button>
+                            <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleDeleteClick(party.hall)}>
+                                <Box
+                                    sx={{
+                                        bgcolor: '#fff',
+                                        borderRadius: '50%',
+                                        p: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                        transition: 'background 0.2s, box-shadow 0.2s',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            bgcolor: '#f0f0f0',
+                                            boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                                            '& .MuiSvgIcon-root': { opacity: 1 }
+                                        }
+                                    }}
+                                >
+                                    <DeleteIcon fontSize="small" sx={{ color: '#ff0000', opacity: 0.85, transition: 'opacity 0.2s' }} />
+                                </Box>
+                            </Button>
+                        </Box>
                         <CardMedia
                             component="img"
                             image={hallInfo[party.hall].image}
@@ -416,9 +506,9 @@ export default function HallPage() {
                                     {hallInfo[party.hall].description}
                                 </Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                    <LocationOnIcon sx={{ fontSize: '1rem', mr: 0.5, color: 'text.secondary' }} />
+                                    <AttachMoneyIcon sx={{ fontSize: '1rem', mr: 0.5, color: 'text.secondary' }} />
                                     <Typography variant="body2" color="text.secondary">
-                                        {hallInfo[party.hall].location}
+                                        Đơn giá bàn tối thiểu: {hallInfo[party.hall].minPrice.toLocaleString('vi-VN')} VNĐ
                                     </Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -436,82 +526,58 @@ export default function HallPage() {
             <Dialog
                 open={selectedHall !== null}
                 onClose={handleCloseDialog}
-                maxWidth="md"
-                fullWidth
-            >
-                <DialogTitle>
-                    Thông tin sảnh
-                </DialogTitle>
-                <DialogContent>
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>STT</TableCell>
-                                    <TableCell>Tên Sảnh</TableCell>
-                                    <TableCell>Loại Sảnh</TableCell>
-                                    <TableCell>Số Lượng Bàn Tối Đa</TableCell>
-                                    <TableCell>Đơn Giá Bàn Tối Thiểu</TableCell>
-                                    <TableCell>Ghi Chú</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {selectedHall && (() => {
-                                    const hallDetails = hallInfo[selectedHall];
-                                    const hallTypeMatch = selectedHall.match(/([A-E])\d/);
-                                    const hallType = hallTypeMatch ? hallTypeMatch[1] : '';
-
-                                    return (
-                                        <TableRow key={selectedHall}>
-                                            <TableCell>1</TableCell>
-                                            <TableCell>{selectedHall}</TableCell>
-                                            <TableCell>{hallType}</TableCell>
-                                            <TableCell>{hallDetails.maxTables}</TableCell>
-                                            <TableCell>{hallDetails.minPrice.toLocaleString('vi-VN')} VNĐ</TableCell>
-                                            <TableCell>{hallDetails.description}</TableCell>
-                                        </TableRow>
-                                    );
-                                })()}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog
-                open={openAddHallDialog}
-                onClose={handleCloseAddHallDialog}
                 maxWidth="sm"
                 fullWidth
-                BackdropProps={{
-                    style: { backdropFilter: 'blur(5px)' }
+                PaperProps={{
+                    sx: {
+                        borderRadius: 4,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+                        p: 0,
+                        overflow: 'hidden',
+                        background: 'linear-gradient(135deg, #f8fafc 60%, #e0e7ef 100%)',
+                    }
                 }}
             >
-                <DialogTitle>Thêm sảnh mới</DialogTitle>
-                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <TextField label="Tên Sảnh" variant="outlined" fullWidth />
-                    <FormControl fullWidth>
-                        <InputLabel>Loại Sảnh</InputLabel>
-                        <Select label="Loại Sảnh">
-                            {hallTypes.map((type) => (
-                                <MenuItem key={type} value={type}>{`Loại ${type}`}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <TextField label="Số Lượng Bàn Tối Đa" variant="outlined" type="number" fullWidth />
-                    <TextField label="Đơn Giá Bàn Tối Thiểu" variant="outlined" type="number" fullWidth />
-                    <TextField label="Vị Trí" variant="outlined" fullWidth />
-                    <TextField label="Ghi Chú" variant="outlined" multiline rows={4} fullWidth />
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
-                        <Button onClick={handleCloseAddHallDialog} color="secondary">
-                            Hủy
-                        </Button>
-                        <Button variant="contained" onClick={handleCloseAddHallDialog}>
-                            Lưu
-                        </Button>
-                    </Box>
-                </DialogContent>
+                {selectedHall && (() => {
+                    const hallDetails = hallInfo[selectedHall];
+                    const hallTypeMatch = selectedHall.match(/([A-E])\d/);
+                    const hallType = hallTypeMatch ? hallTypeMatch[1] : '';
+                    return (
+                        <Box>
+                            <Box sx={{ width: '100%', height: 240, overflow: 'hidden' }}>
+                                <img src={hallDetails.image} alt={selectedHall} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </Box>
+                            <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2a3b5d', mb: 1, textAlign: 'center' }}>
+                                    Sảnh {selectedHall}
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: 3, mb: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <TableRestaurantIcon sx={{ color: '#4880FF' }} />
+                                        <Typography variant="body1">Loại: <b>{hallType}</b></Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <AttachMoneyIcon sx={{ color: '#00b894' }} />
+                                        <Typography variant="body1">Giá bàn: <b>{hallDetails.minPrice.toLocaleString('vi-VN')} VNĐ</b></Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <TableRestaurantIcon sx={{ color: '#ff9800' }} />
+                                        <Typography variant="body1">Tối đa: <b>{hallDetails.maxTables}</b> bàn</Typography>
+                                    </Box>
+                                </Box>
+                                <Typography variant="body2" sx={{ color: '#555', textAlign: 'center', mb: 2 }}>
+                                    {hallDetails.description}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    );
+                })()}
             </Dialog>
+
+            <AddHallDialog open={openAddHallDialog} onClose={handleCloseAddHallDialog} hallTypes={hallTypes} />
+            <EditHallDialog open={openEditHallDialog} onClose={handleCloseEditHallDialog} hall={hallToEdit} hallTypes={hallTypes} />
+
+            <ConfirmDelete open={openConfirmDelete} onClose={handleCloseConfirmDelete} onConfirm={handleConfirmDelete} />
         </Box>
     );
 }

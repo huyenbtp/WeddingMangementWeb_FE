@@ -1,3 +1,5 @@
+// Đã chuyển sang src/pages/Hall/hall.interface.ts
+
 export interface IHall {
     id: string;
     name: string;

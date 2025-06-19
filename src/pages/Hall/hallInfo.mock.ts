@@ -6,21 +6,21 @@ export interface IHallInfo {
     minPrice: number;
 }
 
-import hallA1Image from "../assets/ảnh 1.webp";
-import hallA2Image from "../assets/ảnh 2.webp";
-import hallA3Image from "../assets/ảnh 3.jpg";
-import hallB1Image from "../assets/ảnh 4.jpg";
-import hallB2Image from "../assets/ảnh 5.jpg";
-import hallB3Image from "../assets/ảnh 6.png";
-import hallC1Image from "../assets/ảnh 7.jpg";
-import hallC2Image from "../assets/ảnh 8.jpg";
-import hallC3Image from "../assets/ảnh 9.jpg";
-import hallD1Image from "../assets/ảnh 10.jpg";
-import hallD2Image from "../assets/ảnh 11.jpg";
-import hallD3Image from "../assets/ảnh 12.jpg";
-import hallE1Image from "../assets/ảnh 13.jpg";
-import hallE2Image from "../assets/ảnh 14.jpeg";
-import hallE3Image from "../assets/ảnh 15.jpg";
+import hallA1Image from "../../assets/ảnh 1.webp";
+import hallA2Image from "../../assets/ảnh 2.webp";
+import hallA3Image from "../../assets/ảnh 3.jpg";
+import hallB1Image from "../../assets/ảnh 4.jpg";
+import hallB2Image from "../../assets/ảnh 5.jpg";
+import hallB3Image from "../../assets/ảnh 6.png";
+import hallC1Image from "../../assets/ảnh 7.jpg";
+import hallC2Image from "../../assets/ảnh 8.jpg";
+import hallC3Image from "../../assets/ảnh 9.jpg";
+import hallD1Image from "../../assets/ảnh 10.jpg";
+import hallD2Image from "../../assets/ảnh 11.jpg";
+import hallD3Image from "../../assets/ảnh 12.jpg";
+import hallE1Image from "../../assets/ảnh 13.jpg";
+import hallE2Image from "../../assets/ảnh 14.jpeg";
+import hallE3Image from "../../assets/ảnh 15.jpg";
 
 export const hallInfo: Record<string, IHallInfo> = {
     "Grand Ballroom A1": {
@@ -128,4 +128,4 @@ export const hallInfo: Record<string, IHallInfo> = {
         maxTables: 40,
         minPrice: 1600000,
     }
-};
+}; 
