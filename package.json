@@ -18,6 +18,8 @@
     "@mui/material": "^7.0.2",
     "@mui/x-date-pickers": "^8.2.0",
     "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "lucide-react": "^0.506.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
