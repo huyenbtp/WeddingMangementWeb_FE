@@ -176,13 +176,12 @@ const RegisterPage: React.FC = () => {
                         fullWidth
                         variant="contained"
                         sx={{
-                            mt: 3,
+                            mt: 1,
                             mb: 2,
-                            bgcolor: '#4880FF', // Màu xanh
-                            color: '#808080', // Màu chữ xám đậm
+                            bgcolor: '#4880FF',
+                            color: '#fff',
                             '&:hover': {
-                                bgcolor: '#DCDCDC',
-                                cursor: 'default',
+                                bgcolor: '#3660CC',
                             },
                         }}
                         onClick={handleSubmitRegister}

@@ -116,27 +116,14 @@ const LoginPage: React.FC = () => {
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'space-between',
+                            justifyContent: 'flex-end',
                             width: '100%',
                             mt: 1,
                             mb: 2,
                             alignItems: 'center',
                         }}
                     >
-                        <FormControlLabel
-                            control={(
-                                <Checkbox
-                                    value="remember"
-                                    color="primary"
-                                    checked={rememberMe}
-                                    onChange={(e) => setRememberMe(e.target.checked)}
-                                />
-                            )}
-                            label="Duy trì đăng nhập"
-                        />
-                        <Link href="#" variant="body2" sx={{ color: '#4880FF' }}>
-                            Quên mật khẩu?
-                        </Link>
+                        {/* Đã xóa Duy trì đăng nhập và Quên mật khẩu */}
                     </Box>
                     <Button
                         type="button"
@@ -146,10 +133,9 @@ const LoginPage: React.FC = () => {
                             mt: 1,
                             mb: 2,
                             bgcolor: '#4880FF',
-                            color: '#808080',
+                            color: '#fff',
                             '&:hover': {
-                                bgcolor: '#DCDCDC',
-                                cursor: 'default',
+                                bgcolor: '#3660CC',
                             },
                         }}
                         onClick={handleLogin}

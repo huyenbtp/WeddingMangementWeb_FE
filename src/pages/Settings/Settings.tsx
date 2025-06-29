@@ -28,8 +28,8 @@ export default function Settings() {
   // const penaltyRuleEnabled = localStorage.getItem('penaltyRuleEnabled') === 'true';
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f6fa', py: 4 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ background: '#f5f6fa', minHeight: '100vh', p: 0 }}>
+      <Box sx={{ background: '#fff', borderRadius: 3, p: 3, boxShadow: '0 4px 24px rgba(0,0,0,0.04)', maxWidth: 1400, mx: 'auto', width: '100%' }}>
         {/* Header */}
         <Typography
           variant="h3"
@@ -85,7 +85,7 @@ export default function Settings() {
           <Typography>Hiển thị phát âm</Typography>
           <Switch checked={showPronunciation} onChange={e => setShowPronunciation(e.target.checked)} color="primary" />
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 }

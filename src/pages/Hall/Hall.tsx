@@ -326,6 +326,13 @@ export default function HallPage() {
         setParties(filteredParties);
     }, [searchQuery, selectedType]);
 
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
     const hallTypes = ["A", "B", "C", "D", "E"];
 
     return (
