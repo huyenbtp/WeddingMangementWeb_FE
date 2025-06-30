@@ -94,9 +94,7 @@ export default function PartyForm({
             }}>
                 {readOnly ?
                     "Thông tin tiệc"
-                    : initialData ?
-                        "Cập nhật thông tin tiệc"
-                        : "Đặt tiệc"
+                    : initialData && "Cập nhật thông tin tiệc"
                 }
             </DialogTitle>
 
@@ -166,7 +164,7 @@ export default function PartyForm({
                                         ...form,
                                         date: (value?.toDate() || new Date()).toString()
                                     })}
-                                    disabled={readOnly}
+                                    disabled={true}
                                     sx={{
                                         "& .MuiPickersInputBase-root": {
                                             backgroundColor: '#fff',
@@ -257,7 +255,7 @@ export default function PartyForm({
                                 value={form.shift}
                                 onChange={(e) => setForm({ ...form, shift: e.target.value })}
                                 displayEmpty
-                            disabled={readOnly}
+                                disabled={true}
                                 sx={{
                                     height: '61px',
                                     "& .MuiSelect-icon": {
@@ -319,7 +317,7 @@ export default function PartyForm({
                                 value={form.hall}
                                 onChange={(e) => setForm({ ...form, hall: e.target.value })}
                                 displayEmpty
-                            disabled={readOnly}
+                                disabled={true}
                                 sx={{
                                     height: '61px',
                                     "& .MuiSelect-icon": {
@@ -379,7 +377,7 @@ export default function PartyForm({
                         </Typography>
                         <TextField fullWidth value={form.deposit}
                             placeholder="Nhập tiền cọc"
-                            disabled={readOnly}
+                            disabled={true}
                             onChange={(e) => setForm({ ...form, deposit: Number(e.target.value) })} />
                     </Box>
 
@@ -392,7 +390,7 @@ export default function PartyForm({
                         </Typography>
                         <TextField fullWidth value={form.tables}
                             placeholder="Nhập số lượng bàn"
-                            disabled={readOnly}
+                            disabled={true}
                             onChange={(e) => setForm({ ...form, tables: Number(e.target.value) })} />
                     </Box>
 
@@ -405,7 +403,7 @@ export default function PartyForm({
                         </Typography>
                         <TextField fullWidth value={form.reserveTables}
                             placeholder="Nhập số bàn dự trữ"
-                            disabled={readOnly}
+                            disabled={true}
                             onChange={(e) => setForm({ ...form, reserveTables: Number(e.target.value) })} />
                     </Box>
                 </Box>
