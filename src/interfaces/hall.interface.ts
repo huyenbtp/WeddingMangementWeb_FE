@@ -8,19 +8,7 @@ export interface IHall {
     minTablePrice: number;
     description: string;
     image: string;
-}
-
-export interface IParty {
-    id: number;
-    groom: string;
-    bride: string;
-    phone: string;
-    date: string;
-    shift: string;
-    hall: string;
-    type: string;
-    deposit: number;
-    tables: number;
-    reserveTables: number;
-    status: string;
+    location: string;
+    minPrice: number;
+    maxTables: number;
 }

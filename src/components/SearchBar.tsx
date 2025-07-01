@@ -4,13 +4,16 @@ import {
     InputAdornment,
 } from "@mui/material";
 import { SearchIcon } from "lucide-react";
+import { SxProps } from '@mui/material';
 
 export default function SearchBar({
     value,
     onChange,
+    sx
 }: {
     value: string,
     onChange: (e: any) => void,
+    sx?: SxProps,
 }) {
     return (
         <TextField
@@ -22,24 +25,7 @@ export default function SearchBar({
             value={value}
             onChange={onChange}
             fullWidth
-            sx={{
-                "& fieldset": {
-                    borderRadius: "10px",
-                },
-                "& .MuiInputBase-root": {
-                    paddingLeft: "0px",
-                    paddingRight: "12px",
-                    backgroundColor: '#fff',
-                },
-                "& .MuiInputBase-input": {
-                    padding: "10px 0px",
-                    fontSize: "16px",
-                    "&::placeholder": {
-                        color: "#a5bed4",
-                        opacity: 1,
-                    },
-                },
-            }}
+            sx={sx}
             slotProps={{
                 input: {
                     startAdornment: (

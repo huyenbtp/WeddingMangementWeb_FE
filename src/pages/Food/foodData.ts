@@ -1,16 +1,9 @@
-export interface Food {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    category: string;
-}
+import { IFood } from '../../interfaces/food.interface';
 
-export const foodList: Food[] = [
+export const foodList: IFood[] = [
     // Món Khai Vị
     {
-        id: 1,
+        id: "1",
         name: "Gỏi Ngó Sen Tôm Thịt",
         description: "Gỏi ngó sen giòn với tôm và thịt heo, nước mắm pha",
         price: 120000,
@@ -18,7 +11,7 @@ export const foodList: Food[] = [
         category: "Món Khai Vị"
     },
     {
-        id: 2,
+        id: "2",
         name: "Gỏi Bưởi Tôm Khô",
         description: "Gỏi bưởi với tôm khô và rau răm",
         price: 100000,
@@ -26,7 +19,7 @@ export const foodList: Food[] = [
         category: "Món Khai Vị"
     },
     {
-        id: 3,
+        id: "3",
         name: "Gỏi Cá Hồi",
         description: "Cá hồi tươi với sốt mayonnaise và rau sống",
         price: 150000,
@@ -34,7 +27,7 @@ export const foodList: Food[] = [
         category: "Món Khai Vị"
     },
     {
-        id: 4,
+        id: "4",
         name: "Gỏi Cuốn Tôm Thịt",
         description: "Gỏi cuốn với tôm, thịt heo và rau sống",
         price: 80000,
@@ -42,7 +35,7 @@ export const foodList: Food[] = [
         category: "Món Khai Vị"
     },
     {
-        id: 5,
+        id: "5",
         name: "Salad Hải Sản",
         description: "Salad với tôm, mực và sốt mayonnaise",
         price: 120000,
@@ -52,7 +45,7 @@ export const foodList: Food[] = [
 
     // Món Súp
     {
-        id: 6,
+        id: "6",
         name: "Súp Cua",
         description: "Súp cua với trứng cút và nấm",
         price: 100000,
@@ -60,7 +53,7 @@ export const foodList: Food[] = [
         category: "Món Súp"
     },
     {
-        id: 7,
+        id: "7",
         name: "Súp Hải Sản",
         description: "Súp với tôm, mực và các loại hải sản",
         price: 120000,
@@ -68,7 +61,7 @@ export const foodList: Food[] = [
         category: "Món Súp"
     },
     {
-        id: 8,
+        id: "8",
         name: "Súp Yến",
         description: "Súp yến với thịt gà và nấm",
         price: 200000,
@@ -78,7 +71,7 @@ export const foodList: Food[] = [
 
     // Món Chính
     {
-        id: 9,
+        id: "9",
         name: "Gà Nướng Muối Ớt",
         description: "Gà nướng với muối ớt và lá chanh",
         price: 180000,
@@ -86,7 +79,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 10,
+        id: "10",
         name: "Vịt Quay Bắc Kinh",
         description: "Vịt quay với bánh kếp và sốt hoisin",
         price: 350000,
@@ -94,7 +87,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 11,
+        id: "11",
         name: "Tôm Hùm Hấp Bia",
         description: "Tôm hùm hấp với bia và sả",
         price: 450000,
@@ -102,7 +95,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 12,
+        id: "12",
         name: "Cá Chẽm Hấp Xì Dầu",
         description: "Cá chẽm hấp với xì dầu và gừng",
         price: 280000,
@@ -110,7 +103,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 13,
+        id: "13",
         name: "Bò Wagyu Nướng",
         description: "Thịt bò Wagyu nướng với sốt nấm",
         price: 500000,
@@ -118,7 +111,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 14,
+        id: "14",
         name: "Cua Hoàng Đế Rang Muối",
         description: "Cua hoàng đế rang muối ớt",
         price: 400000,
@@ -126,7 +119,7 @@ export const foodList: Food[] = [
         category: "Món Chính"
     },
     {
-        id: 15,
+        id: "15",
         name: "Lẩu Hải Sản",
         description: "Lẩu với các loại hải sản tươi",
         price: 350000,
@@ -136,7 +129,7 @@ export const foodList: Food[] = [
 
     // Món Xào
     {
-        id: 16,
+        id: "16",
         name: "Mì Xào Hải Sản",
         description: "Mì xào với tôm, mực và các loại hải sản",
         price: 120000,
@@ -144,7 +137,7 @@ export const foodList: Food[] = [
         category: "Món Xào"
     },
     {
-        id: 17,
+        id: "17",
         name: "Cơm Rang Dương Châu",
         description: "Cơm rang với trứng, tôm và thịt",
         price: 100000,
@@ -152,7 +145,7 @@ export const foodList: Food[] = [
         category: "Món Xào"
     },
     {
-        id: 18,
+        id: "18",
         name: "Rau Xào Tỏi",
         description: "Rau cải xào với tỏi",
         price: 80000,
@@ -162,7 +155,7 @@ export const foodList: Food[] = [
 
     // Món Cơm
     {
-        id: 19,
+        id: "19",
         name: "Cơm Gà Xối Mỡ",
         description: "Cơm gà với nước mắm gừng",
         price: 100000,
@@ -170,7 +163,7 @@ export const foodList: Food[] = [
         category: "Món Cơm"
     },
     {
-        id: 20,
+        id: "20",
         name: "Cơm Rang Cua",
         description: "Cơm rang với thịt cua",
         price: 150000,
@@ -180,7 +173,7 @@ export const foodList: Food[] = [
 
     // Món Tráng Miệng
     {
-        id: 21,
+        id: "21",
         name: "Chè Thái",
         description: "Chè Thái với các loại trái cây",
         price: 50000,
@@ -188,7 +181,7 @@ export const foodList: Food[] = [
         category: "Món Tráng Miệng"
     },
     {
-        id: 22,
+        id: "22",
         name: "Bánh Flan",
         description: "Bánh flan với caramel",
         price: 40000,
@@ -196,7 +189,7 @@ export const foodList: Food[] = [
         category: "Món Tráng Miệng"
     },
     {
-        id: 23,
+        id: "23",
         name: "Kem Dâu",
         description: "Kem dâu tươi",
         price: 45000,
@@ -206,7 +199,7 @@ export const foodList: Food[] = [
 
     // Món Ăn Kèm
     {
-        id: 24,
+        id: "24",
         name: "Bánh Mì",
         description: "Bánh mì tươi",
         price: 20000,
@@ -214,7 +207,7 @@ export const foodList: Food[] = [
         category: "Món Ăn Kèm"
     },
     {
-        id: 25,
+        id: "25",
         name: "Bánh Bao",
         description: "Bánh bao nhân thịt",
         price: 25000,

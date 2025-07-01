@@ -1,5 +1,5 @@
 export interface IParty {
-    id: number;
+    id: string;
     groom: string;
     bride: string;
     phone: string;

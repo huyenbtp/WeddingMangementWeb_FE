@@ -1,15 +1,8 @@
-export interface Service {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    category: string;
-}
+import { IService } from '../../interfaces/service.interface';
 
-export const serviceList: Service[] = [
+export const serviceList: IService[] = [
     {
-        id: 1,
+        id: "1",
         name: "Trang Trí Sảnh Tiệc",
         description: "Trang trí sảnh tiệc với hoa tươi, bóng bay, backdrop và các phụ kiện trang trí",
         price: 15000000,
@@ -17,7 +10,7 @@ export const serviceList: Service[] = [
         category: "Trang Trí"
     },
     {
-        id: 2,
+        id: "2",
         name: "Trang Trí Bàn Tiệc",
         description: "Trang trí bàn tiệc với khăn trải bàn, hoa tươi, nến và các phụ kiện",
         price: 500000,
@@ -25,7 +18,7 @@ export const serviceList: Service[] = [
         category: "Trang Trí"
     },
     {
-        id: 3,
+        id: "3",
         name: "Trang Trí Lễ Đường",
         description: "Trang trí lễ đường với hoa tươi, backdrop và các phụ kiện trang trí",
         price: 10000000,
@@ -33,7 +26,7 @@ export const serviceList: Service[] = [
         category: "Trang Trí"
     },
     {
-        id: 4,
+        id: "4",
         name: "MC Chuyên Nghiệp",
         description: "MC dẫn chương trình đám cưới chuyên nghiệp, có kinh nghiệm",
         price: 5000000,
@@ -41,7 +34,7 @@ export const serviceList: Service[] = [
         category: "MC & Ca Sĩ"
     },
     {
-        id: 5,
+        id: "5",
         name: "Ca Sĩ Hát Live",
         description: "Ca sĩ hát live tại đám cưới với nhạc cụ",
         price: 8000000,
@@ -49,7 +42,7 @@ export const serviceList: Service[] = [
         category: "MC & Ca Sĩ"
     },
     {
-        id: 6,
+        id: "6",
         name: "Ban Nhạc Sống",
         description: "Ban nhạc sống biểu diễn tại đám cưới",
         price: 12000000,
@@ -57,7 +50,7 @@ export const serviceList: Service[] = [
         category: "MC & Ca Sĩ"
     },
     {
-        id: 7,
+        id: "7",
         name: "Quay Phim Chuyên Nghiệp",
         description: "Quay phim đám cưới với máy quay chuyên nghiệp",
         price: 15000000,
@@ -65,7 +58,7 @@ export const serviceList: Service[] = [
         category: "Quay Chụp"
     },
     {
-        id: 8,
+        id: "8",
         name: "Chụp Ảnh Cưới",
         description: "Chụp ảnh cưới với nhiếp ảnh gia chuyên nghiệp",
         price: 10000000,
@@ -73,7 +66,7 @@ export const serviceList: Service[] = [
         category: "Quay Chụp"
     },
     {
-        id: 9,
+        id: "9",
         name: "Trang Điểm Cô Dâu",
         description: "Trang điểm cô dâu với chuyên gia trang điểm",
         price: 5000000,
@@ -81,7 +74,7 @@ export const serviceList: Service[] = [
         category: "Làm Đẹp"
     },
     {
-        id: 10,
+        id: "10",
         name: "Làm Tóc Cô Dâu",
         description: "Làm tóc cô dâu với chuyên gia tạo mẫu tóc",
         price: 3000000,
@@ -89,7 +82,7 @@ export const serviceList: Service[] = [
         category: "Làm Đẹp"
     },
     {
-        id: 11,
+        id: "11",
         name: "Áo Dài Cưới",
         description: "Cho thuê áo dài cưới truyền thống",
         price: 2000000,
@@ -97,7 +90,7 @@ export const serviceList: Service[] = [
         category: "Trang Phục"
     },
     {
-        id: 12,
+        id: "12",
         name: "Vest Cưới",
         description: "Cho thuê vest cưới cho chú rể",
         price: 1500000,
@@ -105,7 +98,7 @@ export const serviceList: Service[] = [
         category: "Trang Phục"
     },
     {
-        id: 13,
+        id: "13",
         name: "Xe Hoa",
         description: "Cho thuê xe hoa trang trí đẹp mắt",
         price: 5000000,
@@ -113,7 +106,7 @@ export const serviceList: Service[] = [
         category: "Phương Tiện"
     },
     {
-        id: 14,
+        id: "14",
         name: "Xe Đưa Đón Khách",
         description: "Dịch vụ xe đưa đón khách mời",
         price: 3000000,
@@ -121,7 +114,7 @@ export const serviceList: Service[] = [
         category: "Phương Tiện"
     },
     {
-        id: 15,
+        id: "15",
         name: "Thiệp Cưới",
         description: "Thiết kế và in thiệp cưới",
         price: 100000,
@@ -129,7 +122,7 @@ export const serviceList: Service[] = [
         category: "Thiệp & Quà"
     },
     {
-        id: 16,
+        id: "16",
         name: "Hộp Quà Cưới",
         description: "Thiết kế và làm hộp quà cưới",
         price: 50000,
@@ -137,7 +130,7 @@ export const serviceList: Service[] = [
         category: "Thiệp & Quà"
     },
     {
-        id: 17,
+        id: "17",
         name: "Bánh Cưới",
         description: "Đặt bánh cưới nhiều tầng",
         price: 3000000,
@@ -145,7 +138,7 @@ export const serviceList: Service[] = [
         category: "Bánh & Rượu"
     },
     {
-        id: 18,
+        id: "18",
         name: "Rượu Vang",
         description: "Cung cấp rượu vang cho tiệc cưới",
         price: 2000000,
@@ -153,7 +146,7 @@ export const serviceList: Service[] = [
         category: "Bánh & Rượu"
     },
     {
-        id: 19,
+        id: "19",
         name: "Bảo Vệ",
         description: "Dịch vụ bảo vệ cho đám cưới",
         price: 2000000,
@@ -161,7 +154,7 @@ export const serviceList: Service[] = [
         category: "An Ninh"
     },
     {
-        id: 20,
+        id: "20",
         name: "Y Tế",
         description: "Dịch vụ y tế tại đám cưới",
         price: 1500000,

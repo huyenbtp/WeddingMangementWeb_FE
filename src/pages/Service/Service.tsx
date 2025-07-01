@@ -1,29 +1,34 @@
 import { useState, useEffect } from 'react';
-import { serviceList, Service as ServiceType } from './serviceData';
+import { serviceList } from './serviceData';
+import { IService } from '../../interfaces/service.interface';
 import './Service.css';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControl, InputLabel, Select, MenuItem, Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Typography } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
 import ServiceAddDialog from './ServiceAddDialog.tsx';
 import ServiceEditDialog from './ServiceEditDialog.tsx';
 import ConfirmDelete from '../../components/Alert/ConfirmDelete/ConfirmDelete';
 import ServiceDetailMenu from '../../components/Menu/ServiceDetailMenu';
+import PetalAnimation from '../../components/Animations/PetalAnimation';
+import InfoCard from '../../components/Card/InfoCard';
+import SearchBar from '../../components/SearchBar';
+import AddHallButton from '../../components/Card/AddHallButton';
 
 export default function Service() {
     const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả');
     const [openAddServiceDialog, setOpenAddServiceDialog] = useState<boolean>(false);
     const [openEditServiceDialog, setOpenEditServiceDialog] = useState<boolean>(false);
-    const [serviceToEdit, setServiceToEdit] = useState<ServiceType | null>(null);
+    const [serviceToEdit, setServiceToEdit] = useState<IService | null>(null);
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
-    const [serviceToDelete, setServiceToDelete] = useState<ServiceType | null>(null);
     const [detailDialogOpen, setDetailDialogOpen] = useState(false);
-    const [selectedService, setSelectedService] = useState<ServiceType | null>(null);
+    const [selectedService, setSelectedService] = useState<IService | null>(null);
+    const [searchKey, setSearchKey] = useState("");
     const categories = ['Tất cả', 'Trang Trí', 'MC & Ca Sĩ', 'Quay Chụp', 'Làm Đẹp', 'Trang Phục', 'Phương Tiện', 'Thiệp & Quà', 'Bánh & Rượu', 'An Ninh'];
 
-    const filteredServices = selectedCategory === 'Tất cả' 
-        ? serviceList 
-        : serviceList.filter(service => service.category === selectedCategory);
+    const filteredServices = serviceList.filter(service => {
+        const matchesCategory = selectedCategory === 'Tất cả' || service.category === selectedCategory;
+        const matchesSearch = service.name.toLowerCase().includes(searchKey.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
     const handleOpenAddServiceDialog = () => {
         setOpenAddServiceDialog(true);
@@ -33,7 +38,7 @@ export default function Service() {
         setOpenAddServiceDialog(false);
     };
 
-    const handleEditClick = (service: ServiceType) => {
+    const handleEditClick = (service: IService) => {
         setServiceToEdit(service);
         setOpenEditServiceDialog(true);
     };
@@ -43,23 +48,19 @@ export default function Service() {
         setServiceToEdit(null);
     };
 
-    const handleDeleteClick = (service: ServiceType) => {
-        setServiceToDelete(service);
+    const handleDeleteClick = () => {
         setOpenDeleteDialog(true);
     };
 
     const handleCloseDeleteDialog = () => {
         setOpenDeleteDialog(false);
-        setServiceToDelete(null);
     };
 
     const handleConfirmDelete = () => {
-        // TODO: Xử lý xóa dịch vụ ở đây
         setOpenDeleteDialog(false);
-        setServiceToDelete(null);
     };
 
-    const handleServiceClick = (service: ServiceType) => {
+    const handleServiceClick = (service: IService) => {
         setSelectedService(service);
         setDetailDialogOpen(true);
     };
@@ -76,29 +77,78 @@ export default function Service() {
         };
     }, []);
 
+    const containerVariants = {
+        hidden: { opacity: 1 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1
+        }
+    };
+
     return (
-        <Box sx={{ background: '#f5f6fa', minHeight: '100vh', p: 0 }}>
-            <Box sx={{ background: '#fff', borderRadius: 3, p: 3, boxShadow: '0 4px 24px rgba(0,0,0,0.04)', maxWidth: 1400, mx: 'auto', width: '100%' }}>
+        <Box sx={{ background: '#f5f6fa', minHeight: '100vh', p: 0, position: 'relative', overflow: 'hidden' }}>
+            <PetalAnimation />
+            <Box sx={{ background: 'rgba(255, 255, 255, 0.5)', backdropFilter: 'blur(2px)', borderRadius: 3, p: 3, boxShadow: '0 4px 24px rgba(0,0,0,0.04)', maxWidth: 1400, mx: 'auto', width: '100%', position: 'relative', zIndex: 1 }}>
                 <Box sx={{ height: '100vh', overflowY: 'auto', pr: 2 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <h2>Dịch Vụ Đám Cưới</h2>
-                        <Button
-                            variant="contained"
-                            startIcon={<AddCircleOutlineIcon />}
+                    <Typography
+                        sx={{
+                            userSelect: "none",
+                            color: "var(--text-color)",
+                            fontWeight: "bold",
+                            fontSize: "32px",
+                            marginBottom: "20px",
+                            textAlign: 'left',
+                        }}
+                    >
+                        Dịch Vụ Đám Cưới
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 2, marginBottom: '20px', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <SearchBar
+                            value={searchKey}
+                            onChange={e => setSearchKey(e.target.value)}
                             sx={{
-                                whiteSpace: 'nowrap',
-                                borderRadius: '50px',
-                                backgroundColor: '#4880FF',
-                                '&:hover': {
-                                    backgroundColor: '#3a66cc',
-                                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                                height: '48px',
+                                '& .MuiInputBase-root': {
+                                    height: '48px',
+                                    fontSize: '15px',
+                                    borderRadius: '10px',
                                 },
                             }}
+                        />
+                        <AddHallButton
                             onClick={handleOpenAddServiceDialog}
+                            sx={{
+                                height: '48px',
+                                padding: '0 20px',
+                                borderRadius: '10px',
+                                minWidth: 'unset',
+                                fontSize: '15px',
+                                boxShadow: 'none',
+                                lineHeight: 1.2,
+                                display: 'flex',
+                                alignItems: 'center',
+                                backgroundColor: '#4880FF !important',
+                                color: '#fff',
+                                filter: 'none',
+                                opacity: 1,
+                                '&:hover': {
+                                    backgroundColor: '#3578f0 !important',
+                                },
+                            }}
                         >
                             Thêm dịch vụ
-                        </Button>
-                    </div>
+                        </AddHallButton>
+                    </Box>
                     
                     <div className="category-filter">
                         {categories.map(category => (
@@ -112,118 +162,51 @@ export default function Service() {
                         ))}
                     </div>
 
-                    <Box sx={{ 
-                        display: 'flex', 
-                        flexWrap: 'wrap', 
-                        gap: 3,
-                        '& > *': {
-                            flex: '0 1 calc(25% - 18px)',
-                            minWidth: '240px',
-                            maxWidth: '1fr',
-                        }
-                    }}>
-                        {filteredServices.map((service: ServiceType) => (
-                            <Card
-                                key={service.id}
-                                sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    cursor: 'pointer',
-                                    transition: 'transform 0.2s',
-                                    borderRadius: 12,
-                                    backgroundColor: '#fff',
-                                    '&:hover': {
-                                        transform: 'scale(1.02)',
-                                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                                    },
-                                    position: 'relative',
-                                }}
-                                onClick={() => handleServiceClick(service)}
-                            >
-                                <Box sx={{
-                                    position: 'absolute',
-                                    top: 8,
-                                    right: 8,
-                                    display: 'flex',
-                                    gap: 1,
-                                    zIndex: 2,
-                                }} onClick={e => e.stopPropagation()}>
-                                    <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleEditClick(service)}>
-                                        <Box
-                                            sx={{
-                                                bgcolor: '#fff',
-                                                borderRadius: '50%',
-                                                p: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                                                transition: 'background 0.2s, box-shadow 0.2s',
-                                                cursor: 'pointer',
-                                                '&:hover': {
-                                                    bgcolor: '#f0f0f0',
-                                                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                                                    '& .MuiSvgIcon-root': { opacity: 1 }
-                                                }
-                                            }}
-                                        >
-                                            <EditIcon fontSize="small" sx={{ color: '#00e1ff', opacity: 0.85, transition: 'opacity 0.2s' }} />
-                                        </Box>
-                                    </Button>
-                                    <Button size="small" sx={{ minWidth: 0, p: 0.5 }} onClick={() => handleDeleteClick(service)}>
-                                        <Box
-                                            sx={{
-                                                bgcolor: '#fff',
-                                                borderRadius: '50%',
-                                                p: '4px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                                                transition: 'background 0.2s, box-shadow 0.2s',
-                                                cursor: 'pointer',
-                                                '&:hover': {
-                                                    bgcolor: '#f0f0f0',
-                                                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                                                    '& .MuiSvgIcon-root': { opacity: 1 }
-                                                }
-                                            }}
-                                        >
-                                            <DeleteIcon fontSize="small" sx={{ color: '#ff0000', opacity: 0.85, transition: 'opacity 0.2s' }} />
-                                        </Box>
-                                    </Button>
-                                </Box>
-                                <CardMedia
-                                    component="img"
-                                    image={service.image}
-                                    alt={service.name}
+                    <Box
+                        component={motion.div}
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: 3,
+                            '& > *': {
+                                flex: '0 1 calc(25% - 18px)',
+                                minWidth: '240px',
+                                maxWidth: '1fr',
+                            }
+                        }}>
+                        <AnimatePresence>
+                            {filteredServices.map((service: IService) => (
+                                <Box
+                                    component={motion.div}
+                                    key={service.id}
+                                    layout
+                                    variants={itemVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
                                     sx={{
-                                        width: '100%',
-                                        objectFit: 'cover',
-                                        height: 220,
-                                        borderTopLeftRadius: 12,
-                                        borderTopRightRadius: 12,
+                                        flex: '0 1 calc(25% - 18px)',
+                                        minWidth: '240px',
+                                        maxWidth: '1fr',
+                                        height: '100%'
                                     }}
-                                />
-                                <CardContent sx={{
-                                    flexGrow: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1, fontSize: '1.5rem' }}>
-                                        {service.name}
-                                    </Typography>
-                                    <Typography color="text.secondary" sx={{ mb: 2, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                                        {service.description}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        Giá: {service.price.toLocaleString('vi-VN')} VNĐ
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                >
+                                    <InfoCard
+                                        title={service.name}
+                                        image={service.image}
+                                        description={service.description}
+                                        price={`Giá: ${service.price.toLocaleString('vi-VN')} VNĐ`}
+                                        onCardClick={() => handleServiceClick(service)}
+                                        onEditClick={() => handleEditClick(service)}
+                                        onDeleteClick={() => handleDeleteClick()}
+                                    />
+                                </Box>
+                            ))}
+                        </AnimatePresence>
                     </Box>
 
                     <ServiceAddDialog
