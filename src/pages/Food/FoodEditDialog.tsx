@@ -1,11 +1,11 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
-import { Food as FoodType } from './foodData';
+import { IFood } from '../../interfaces/food.interface';
 
 interface FoodEditDialogProps {
     open: boolean;
     onClose: () => void;
-    food: FoodType | null;
+    food: IFood | null;
     categories: string[];
 }
 
@@ -20,7 +20,7 @@ const FoodEditDialog: React.FC<FoodEditDialogProps> = ({ open, onClose, food, ca
                 <FormControl fullWidth>
                     <InputLabel>Loại món</InputLabel>
                     <Select label="Loại món" defaultValue={food?.category || ''}>
-                        {categories.filter(c => c !== 'Tất cả').map((category) => (
+                        {categories.filter(c => c !== 'Tất cả' && ['Món Khai Vị', 'Món Chính', 'Món Tráng Miệng'].includes(c)).map((category) => (
                             <MenuItem key={category} value={category}>{category}</MenuItem>
                         ))}
                     </Select>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
-import { Service as ServiceType } from './serviceData';
+import { IService } from '../../interfaces/service.interface';
 
 interface ServiceEditDialogProps {
     open: boolean;
     onClose: () => void;
-    service: ServiceType | null;
+    service: IService | null;
     categories: string[];
 }
 

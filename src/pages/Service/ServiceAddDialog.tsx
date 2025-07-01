@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
+import { IService } from '../../interfaces/service.interface';
 
 interface ServiceAddDialogProps {
     open: boolean;
     onClose: () => void;
-    onSave: (data: any) => void;
+    onSave: (data: Partial<IService>) => void;
     categories: string[];
 }
 
@@ -25,7 +26,10 @@ const ServiceAddDialog: React.FC<ServiceAddDialogProps> = ({ open, onClose, onSa
     };
 
     const handleSave = () => {
-        onSave(form);
+        onSave({
+            ...form,
+            price: Number(form.price)
+        });
         setForm({ name: '', description: '', price: '', category: '' });
     };
 

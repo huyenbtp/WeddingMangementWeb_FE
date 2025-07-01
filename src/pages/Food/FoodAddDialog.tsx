@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
+import { IFood } from '../../interfaces/food.interface';
 
 interface FoodAddDialogProps {
     open: boolean;
     onClose: () => void;
-    onSave: (data: any) => void;
+    onSave: (data: Partial<IFood>) => void;
     categories: string[];
 }
 
@@ -26,7 +27,12 @@ const FoodAddDialog: React.FC<FoodAddDialogProps> = ({ open, onClose, onSave, ca
     };
 
     const handleSave = () => {
-        onSave(form);
+        onSave({
+            name: form.name,
+            description: form.description,
+            price: Number(form.price),
+            category: form.category
+        });
         setForm({ name: '', description: '', price: '', category: '', image: null });
     };
 
@@ -40,7 +46,7 @@ const FoodAddDialog: React.FC<FoodAddDialogProps> = ({ open, onClose, onSave, ca
                 <FormControl fullWidth>
                     <InputLabel>Loại món</InputLabel>
                     <Select label="Loại món" value={form.category} onChange={handleCategoryChange}>
-                        {categories.filter(c => c !== 'Tất cả').map((category) => (
+                        {categories.filter(c => c !== 'Tất cả' && ['Món Khai Vị', 'Món Chính', 'Món Tráng Miệng'].includes(c)).map((category) => (
                             <MenuItem key={category} value={category}>{category}</MenuItem>
                         ))}
                     </Select>

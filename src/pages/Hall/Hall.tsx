@@ -269,7 +269,12 @@ export default function HallPage() {
             </Dialog>
 
             <AddHallDialog open={openAddHallDialog} onClose={handleCloseAddHallDialog} hallTypes={hallTypes} />
-            <EditHallDialog open={openEditHallDialog} onClose={handleCloseEditHallDialog} hall={hallToEdit?.name || ''} hallTypes={hallTypes} />
+            <EditHallDialog 
+                open={openEditHallDialog} 
+                onClose={handleCloseEditHallDialog} 
+                hall={hallToEdit ? hallToEdit.details : null} 
+                hallTypes={hallTypes} 
+            />
 
             <ConfirmDelete open={openConfirmDelete} onClose={handleCloseConfirmDelete} onConfirm={handleConfirmDelete} />
         </Box>

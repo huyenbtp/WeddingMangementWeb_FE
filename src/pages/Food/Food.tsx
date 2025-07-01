@@ -27,7 +27,7 @@ export default function Food() {
     const [selectedFood, setSelectedFood] = useState<IFood | null>(null);
     const [searchKey, setSearchKey] = useState("");
 
-    const categories = ['Tất cả', 'Món Khai Vị', 'Món Chính', 'Món Súp', 'Món Xào', 'Món Cơm', 'Món Ăn Kèm'];
+    const categories = ['Tất cả', 'Món Khai Vị', 'Món Chính', 'Món Tráng Miệng'];
 
     const filteredFoods = foodList.filter(food => {
         const matchesCategory = selectedCategory === 'Tất cả' || food.category === selectedCategory;
