@@ -369,19 +369,7 @@ export default function PartyTable({
                                     width: "5%",
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        display: 'inline-flex',
-                                        paddingX: 1.5,
-                                        paddingY: 0.5,
-                                        borderRadius: 2,
-                                        fontWeight: 'bold',
-                                        backgroundColor: defaultBgColorMap[party.hall],
-                                        color: defaultTextColorMap[party.hall],
-                                    }}
-                                >
-                                    {party.hall}
-                                </Box>
+                                {party.hall}
                             </TableCell>
 
                             {/* Deposit */}
